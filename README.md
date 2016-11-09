@@ -163,6 +163,4 @@ export class ItemComponent implements OnInit {
 ```
 
 ## Licence
-MIT © [fulls1z3](https://www.github.com/fulls1z3)
-
-
+MIT © 2016 [fulls1z3](https://www.github.com/fulls1z3)
