@@ -49,7 +49,7 @@ const routes = [
     data : {
       metadata : {
         title : 'Toothpaste',
-        override : true, // overrides appending/prepending the application name to the title attribute
+        override : true, // prevents appending/prepending the application name to the title attribute
         description : 'Eating toothpaste is considered to be too healthy!',
       }
     }
