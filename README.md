@@ -2,7 +2,7 @@
 This repository holds the TypeScript source code and distributable bundle of **`ng2-metadata`**, the dynamic page title &amp; meta tags generator for Angular2.
 
 ## Prerequisites
-Verify that you are running at least `@angular v2.1.0` and `@angular/router v3.0.0`. Older versions are not tested, might produce errors.
+Verify that you are running at least `@angular v2.1.0` and `@angular/router v3.1.0`. Older versions are not tested, might produce errors.
 
 ## Getting started
 ### Installation
