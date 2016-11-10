@@ -1,7 +1,7 @@
 {
   "name": "ng2-metadata",
   "description": "Dynamic page title & meta tags generator for Angular2",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": {
     "name": "Burak Tasci",
     "email": "me@fulls1z3.com"
