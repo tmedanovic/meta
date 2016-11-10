@@ -1,12 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { Title, DOCUMENT } from '@angular/platform-browser';
-import { Router, NavigationEnd, Event as NavigationEvent, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
 import { PageTitlePositioning } from './models/page-title-positioning';
 import { METADATA_SETTINGS, MetadataSettings } from './models/metadata-settings';
-
 
 @Injectable()
 export class MetadataService {
@@ -35,11 +34,65 @@ export class MetadataService {
             });
     }
 
+    setTitle(title: string, override = false): MetadataService {
+        const ogTitleElement = this.getOrCreateMetaTag('og:title');
+
+        switch (this.metadataSettings.pageTitlePositioning) {
+            case PageTitlePositioning.AppendPageTitle:
+                title = (!override ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator) : '')
+                            + (!!title ? title : this.metadataSettings.defaults['title']);
+                break;
+            case PageTitlePositioning.PrependPageTitle:
+                title = (!!title ? title : this.metadataSettings.defaults['title'])
+                            + (!override ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName) : '');
+                break;
+        }
+
+        ogTitleElement.setAttribute('content', title);
+        this.titleService.setTitle(title);
+
+        return this;
+    }
+
+    setTag(tag: string, value: string): MetadataService {
+        if (tag === 'title') {
+            throw new Error(`Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
+                + `Please use 'MetadataService.setTitle' instead`);
+        }
+
+        value = !!value ? value : (this.metadataSettings.defaults[tag] || '');
+
+        if (!value) {
+            return this;
+        }
+
+        const tagElement = this.getOrCreateMetaTag(tag);
+        tagElement.setAttribute('content', value);
+
+        if (tag === 'description') {
+            const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
+            ogDescriptionElement.setAttribute('content', value);
+        }
+
+        if (tag === 'author') {
+            const ogAuthorElement = this.getOrCreateMetaTag('og:author');
+            ogAuthorElement.setAttribute('content', value);
+        }
+
+        if (tag === 'publisher') {
+            const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
+            ogPublisherElement.setAttribute('content', value);
+        }
+
+        return this;
+    }
+
     private getOrCreateMetaTag(name: string) {
         let selector = `meta[name='${name}']`;
 
-        if (name.lastIndexOf('og:', 0) === 0)
+        if (name.lastIndexOf('og:', 0) === 0) {
             selector = `meta[property='${name}']`;
+        }
 
         let el = this.document.querySelector(selector);
 
@@ -80,57 +133,5 @@ export class MetadataService {
         this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl);
 
         return true;
-    }
-
-    setTitle(title: string, override = false): MetadataService {
-        const ogTitleElement = this.getOrCreateMetaTag('og:title');
-
-        switch (this.metadataSettings.pageTitlePositioning) {
-            case PageTitlePositioning.AppendPageTitle:
-                title = (!override ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator) : '')
-                            + (!!title ? title : this.metadataSettings.defaults['title']);
-                break;
-            case PageTitlePositioning.PrependPageTitle:
-                title = (!!title ? title : this.metadataSettings.defaults['title'])
-                            + (!override ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName) : '');
-                break;
-        }
-
-        ogTitleElement.setAttribute('content', title);
-        this.titleService.setTitle(title);
-
-        return this;
-    }
-
-    setTag(tag: string, value: string): MetadataService {
-        if (tag === 'title') {
-            throw new Error(`Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
-                + `Please use 'MetadataService.setTitle' instead`);
-        }
-
-        value = !!value ? value : (this.metadataSettings.defaults[tag] || '');
-
-        if (!value)
-            return this;
-
-        const tagElement = this.getOrCreateMetaTag(tag);
-        tagElement.setAttribute('content', value);
-        
-        if (tag === 'description') {
-            const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
-            ogDescriptionElement.setAttribute('content', value);
-        }
-
-        if (tag === 'author') {
-            const ogAuthorElement = this.getOrCreateMetaTag('og:author');
-            ogAuthorElement.setAttribute('content', value);
-        }
-
-        if (tag === 'publisher') {
-            const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
-            ogPublisherElement.setAttribute('content', value);
-        }
-
-        return this;
     }
 }

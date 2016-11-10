@@ -1,10 +1,15 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { MetadataService } from './metadata.service';
+
+import { PageTitlePositioning } from './models/page-title-positioning';
 import { METADATA_SETTINGS, MetadataSettings } from './models/metadata-settings';
+import { MetadataService } from './metadata.service';
 
 @NgModule()
 export class MetadataModule {
-    static forRoot(metadataSettings: MetadataSettings = { defaults : {} }): ModuleWithProviders {
+    static forRoot(metadataSettings: MetadataSettings = {
+                       pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
+                       defaults : {}
+                   }): ModuleWithProviders {
         return {
             ngModule : MetadataModule,
             providers : [

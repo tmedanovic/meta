@@ -7,7 +7,7 @@ export interface MetadataSettings {
     /**
      * represents whether title attributes are positioned before/after the application name
      */
-    pageTitlePositioning?: PageTitlePositioning;
+    pageTitlePositioning: PageTitlePositioning;
     /**
      * separator character(s) between the title attribute and application name
      */
