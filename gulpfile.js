@@ -7,10 +7,7 @@ var gulp = require('gulp'),
             'gulp-*',
             'lazypipe',
             'rimraf'
-        ],
-        rename : {
-            'merge2' : 'merge'
-        }
+        ]
     });
 
 // Helpers
