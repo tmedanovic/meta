@@ -7,7 +7,6 @@ All notable changes to this project will be documented in this file.
 - Added (this) CHANGELOG.md file.
 
 ### Changed
-- README now contains answers to common questions about CHANGELOGs.
 - Updated gulpfile.js.
 - Updated package.json (main, typings).
 
