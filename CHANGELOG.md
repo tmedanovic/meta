@@ -1,6 +1,10 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.0.6] - 2016-11-11
+### Fixed
+- Fixed the "og:url" bug when applicationUrl is not supplied with the default settings.
+
 ## [1.0.5] - 2016-11-11
 ### Added
 - Added typings (*.d.ts) for IDE intellisense.

@@ -130,7 +130,8 @@ export class MetadataService {
                 this.setTag(key, this.metadataSettings.defaults[key]);
             });
 
-        this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl);
+        if (!!this.metadataSettings.applicationUrl)
+            this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl);
 
         return true;
     }
