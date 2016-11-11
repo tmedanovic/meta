@@ -1,7 +1,7 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.0.4] - 2016-11-10
+## [1.0.5] - 2016-11-11
 ### Added
 - Added typings (*.d.ts) for IDE intellisense.
 - Added (this) CHANGELOG.md file.
@@ -9,6 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated gulpfile.js.
 - Updated package.json (main, typings).
+
+## 1.0.4 - 2016-11-11
+- pre-release
 
 ## [1.0.3] - 2016-11-10
 ### Added
