@@ -7,7 +7,10 @@ var gulp = require('gulp'),
             'gulp-*',
             'lazypipe',
             'rimraf'
-        ]
+        ],
+        rename : {
+            'merge2' : 'merge'
+        }
     });
 
 // Helpers
@@ -60,10 +63,26 @@ var ts = {
                     .pipe($.changed('./build', { extension : '.js' }))
                     .pipe(tsProject());
 
-            return tsResult.js
+            var merge2 = require('merge2');
+
+            return merge2([tsResult.js
+                .pipe(gulp.dest('./build'))
+                .pipe(debug('**/*.*')),
+                tsResult.dts
                 .pipe(gulp.dest('./build'))
                 .pipe(debug('**/*.*'))
-                .on('end', done);
+            ]).on('end', done);
+        },
+        defs: function (done) {
+            var dts = require('dts-bundle');
+
+            dts.bundle({
+                name: 'ng2-metadata',
+                main: './build/index.d.ts',
+                out: '../ng2-metadata.d.ts'
+            });
+
+            done();
         },
         bundle : function(done) {
             var ignoreDeps = {};
@@ -90,7 +109,7 @@ var ts = {
                         minify : true,
                         format : 'umd'
                     })
-                .pipe(gulp.dest('./dist'))
+                .pipe(gulp.dest('./dist/bundles'))
                 .pipe(debug())
                 .on('end', done);
         },
@@ -103,6 +122,7 @@ var ts = {
 };
 
 ts['ng2-metadata'].compile.displayName = 'compile:ts';
+ts['ng2-metadata'].defs.displayName = 'def\'s:ts';
 ts['ng2-metadata'].bundle.displayName = 'bundle:ts';
 ts['ng2-metadata'].lint.displayName = 'lint:ts';
 
@@ -123,6 +143,7 @@ gulp.task('_BUILD_',
 //*** _DIST_
 gulp.task('_DIST_',
     gulp.parallel(
+        ts['ng2-metadata'].defs,
         ts['ng2-metadata'].bundle
     ));
 

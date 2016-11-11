@@ -1,11 +1,7 @@
 {
   "name": "ng2-metadata",
+  "version": "1.0.4",
   "description": "Dynamic page title & meta tags generator for Angular2",
-  "version": "1.0.3",
-  "author": {
-    "name": "Burak Tasci",
-    "email": "me@fulls1z3.com"
-  },
   "keywords": [
     "angular",
     "angular2",
@@ -18,9 +14,19 @@
     "page title",
     "open graph"
   ],
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fulls1z3/ng2-metadata/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Burak Tasci",
+    "email": "me@fulls1z3.com"
+  },
+  "main": "dist/bundles/ng2-metadata.umd.min.js",
+  "typings": "ng2-metadata.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fulls1z3/ng2-metadata"
   },
   "dependencies": {
     "@angular/common": "^2.1.0",
@@ -37,16 +43,15 @@
     "gulp": "gulpjs/gulp#4.0",
     "gulp-load-plugins": "^1.3.0",
     "lazypipe": "^1.0.1",
+    "merge2": "^1.0.2",
     "gulp-changed": "^1.3.2",
     "gulp-debug": "^2.1.2",
     "gulp-ignore": "^2.0.1",
-    "gulp-typescript": "^3.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-typescript": "^3.1.2",
+    "dts-bundle": "^0.6.1",
     "gulp-systemjs-builder": "^0.15.0",
     "gulp-tslint": "^6.1.2",
     "rimraf": "^2.5.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fulls1z3/ng2-metadata"
   }
 }
