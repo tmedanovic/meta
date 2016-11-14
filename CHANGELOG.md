@@ -53,6 +53,6 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
-[1.1.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.1
+[1.1.2]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.2
 [1.0.5]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.3...1.0.5
 [1.0.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.2...1.0.3
