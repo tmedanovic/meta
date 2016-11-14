@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 - Added HTML tag `lang` attribute generation (based on "og:locale" setting).
 
 ### Changed
-- `setTag` method overrides default settings.
+- `setTag` method now overrides default settings.
 
 ### Fixed
 - Fixed "og:locale:alternate" issue, multiple tags are being generated for each available locale.
