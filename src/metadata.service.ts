@@ -9,11 +9,14 @@ import { METADATA_SETTINGS, MetadataSettings } from './models/metadata-settings'
 
 @Injectable()
 export class MetadataService {
+    private overrides: any;
+
     constructor(private router: Router,
                 @Inject(DOCUMENT) private document: any,
                 private titleService: Title,
                 private activatedRoute: ActivatedRoute,
                 @Inject(METADATA_SETTINGS) private metadataSettings: MetadataSettings) {
+        this.overrides = {};
 
         this.router.events
             .filter(event => (event instanceof NavigationEnd))
@@ -67,42 +70,94 @@ export class MetadataService {
         }
 
         const tagElement = this.getOrCreateMetaTag(tag);
+
         tagElement.setAttribute('content', value);
+        this.overrides[tag] = true;
 
         if (tag === 'description') {
             const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
             ogDescriptionElement.setAttribute('content', value);
-        }
-
-        if (tag === 'author') {
+        } else if (tag === 'author') {
             const ogAuthorElement = this.getOrCreateMetaTag('og:author');
             ogAuthorElement.setAttribute('content', value);
-        }
-
-        if (tag === 'publisher') {
+        } else if (tag === 'publisher') {
             const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
             ogPublisherElement.setAttribute('content', value);
+        } else if (tag === 'og:locale') {
+            const availableLocales = this.metadataSettings.defaults['og:locale:alternate'];
+
+            this.updateLocales(value, availableLocales);
+            this.overrides['og:locale:alternate'] = true;
+        } else if (tag === 'og:locale:alternate') {
+            const ogLocaleElement = this.getOrCreateMetaTag('og:locale');
+            const currentLocale = ogLocaleElement.getAttribute('content');
+
+            this.updateLocales(currentLocale, value);
+            this.overrides['og:locale'] = true;
         }
 
         return this;
     }
 
+    private createMetaTag(name: string) {
+        const el = this.document.createElement('meta');
+        el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
+        this.document.head.appendChild(el);
+
+        return el;
+    }
+
     private getOrCreateMetaTag(name: string) {
-        let selector = `meta[name='${name}']`;
+        let selector = `meta[name="${name}"]`;
 
         if (name.lastIndexOf('og:', 0) === 0) {
-            selector = `meta[property='${name}']`;
+            selector = `meta[property="${name}"]`;
         }
 
         let el = this.document.querySelector(selector);
 
         if (!el) {
-            el = this.document.createElement('meta');
-            el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
-            this.document.head.appendChild(el);
+            el = this.createMetaTag(name);
         }
 
         return el;
+    }
+
+    private deleteMetaTags(name: string) {
+        let selector = `meta[name="${name}"]`;
+
+        if (name.lastIndexOf('og:', 0) === 0) {
+            selector = `meta[property="${name}"]`;
+        }
+
+        const elements = this.document.querySelectorAll(selector);
+
+        if (!!elements) {
+            elements.forEach((el: any) => {
+                this.document.head.removeChild(el);
+            });
+        }
+    }
+
+    private updateLocales(currentLocale: string, availableLocales: any) {
+        if (!currentLocale) {
+            currentLocale = this.metadataSettings.defaults['og:locale'];
+        }
+
+        const html = this.document.querySelector('html');
+        html.setAttribute('lang', currentLocale);
+
+        if (!!currentLocale && !!availableLocales) {
+            this.deleteMetaTags('og:locale:alternate');
+
+            availableLocales.split(',')
+                .forEach((locale: string) => {
+                    if (currentLocale !== locale) {
+                        const el = this.createMetaTag('og:locale:alternate');
+                        el.setAttribute('content', locale.replace(/-/g, '_'));
+                    }
+                });
+        }
     }
 
     private updateMetadata(metadata: any = {}, currentUrl: string) {
@@ -114,24 +169,43 @@ export class MetadataService {
 
         Object.keys(metadata)
             .forEach(key => {
-                if (key === 'title' || key === 'override') {
+                let value = metadata[key];
+
+                if (key in this.overrides || key === 'title' || key === 'override') {
+                    return;
+                } else if (key === 'og:locale') {
+                    value = value.replace(/-/g, '_');
+                } else if (key === 'og:locale:alternate') {
+                    const currentLocale = metadata['og:locale'];
+                    this.updateLocales(currentLocale, metadata[key]);
+
                     return;
                 }
 
-                this.setTag(key, metadata[key]);
+                this.setTag(key, value);
             });
 
         Object.keys(this.metadataSettings.defaults)
             .forEach(key => {
-                if (key in metadata || key === 'title' || key === 'override') {
+                let value = this.metadataSettings.defaults[key];
+
+                if (key in this.overrides || key in metadata || key === 'title' || key === 'override') {
+                    return;
+                } else if (key === 'og:locale') {
+                    value = value.replace(/-/g, '_');
+                } else if (key === 'og:locale:alternate') {
+                    const currentLocale = metadata['og:locale'];
+                    this.updateLocales(currentLocale, this.metadataSettings.defaults[key]);
+
                     return;
                 }
 
-                this.setTag(key, this.metadataSettings.defaults[key]);
+                this.setTag(key, value);
             });
 
-        if (!!this.metadataSettings.applicationUrl)
+        if (!!this.metadataSettings.applicationUrl) {
             this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl);
+        }
 
         return true;
     }

@@ -119,7 +119,8 @@ const metadataSettings: MetadataSettings = {
     description : 'Mighty Mouse is an animated superhero mouse character',
     'og:image' : 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg'
     'og:type' : 'website',
-    'og:locale' : 'en-US'
+    'og:locale' : 'en_US',
+	'og:locale:alternate' : 'nl_NL,tr_TR'
   }
 };
 
