@@ -1,7 +1,7 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.1.1] - 2016-11-14
+## [1.1.2] - 2016-11-14
 ### Added
 - Added HTML tag `lang` attribute generation (based on "og:locale" setting).
 
@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Fixed "og:locale:alternate" issue, multiple tags are being generated for each available locale.
 - Fixed the "og:url" bug when applicationUrl is not supplied with the default settings.
+- Fixed the issue with trailing slash at "og:url".
+
+## 1.1.1 - 2016-11-14
+- pre-release
 
 ## 1.1.0 - 2016-11-14
 - pre-release

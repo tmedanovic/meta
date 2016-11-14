@@ -204,7 +204,7 @@ export class MetadataService {
             });
 
         if (!!this.metadataSettings.applicationUrl) {
-            this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl);
+            this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl.replace(/\/$/g, ''));
         }
 
         return true;
