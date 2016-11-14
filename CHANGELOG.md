@@ -1,7 +1,7 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] - 2016-11-14
+## [1.1.1] - 2016-11-14
 ### Added
 - Added HTML tag `lang` attribute generation (based on "og:locale" setting).
 
@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Fixed "og:locale:alternate" issue, multiple tags are being generated for each available locale.
 - Fixed the "og:url" bug when applicationUrl is not supplied with the default settings.
+
+## 1.1.0 - 2016-11-14
+- pre-release
 
 ## [1.0.5] - 2016-11-11
 ### Added
@@ -46,6 +49,6 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
-[1.1.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.0
+[1.1.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.1
 [1.0.5]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.3...1.0.5
 [1.0.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.2...1.0.3
