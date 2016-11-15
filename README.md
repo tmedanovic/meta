@@ -157,7 +157,7 @@ export class ItemComponent implements OnInit {
   ngOnInit() {
     this.item = //HTTP GET for "item" in the repository
     this.metadataService.setTitle(`Page for ${this.item.name}`);
-    this.metadataService.setTag('og:image', this.product.imageUrl);
+    this.metadataService.setTag('og:image', this.item.imageUrl);
   }
 }
 
