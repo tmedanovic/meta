@@ -44,8 +44,8 @@ declare module 'ng2-metadata/metadata.service' {
     import { MetadataSettings } from 'ng2-metadata/models/metadata-settings';
     export class MetadataService {
         constructor(router: Router, document: any, titleService: Title, activatedRoute: ActivatedRoute, metadataSettings: MetadataSettings);
-        setTitle(title: string, override?: boolean): MetadataService;
-        setTag(tag: string, value: string): MetadataService;
+        setTitle(title: string, override?: boolean): void;
+        setTag(tag: string, value: string): void;
     }
 }
 

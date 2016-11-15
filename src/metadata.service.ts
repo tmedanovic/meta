@@ -37,7 +37,7 @@ export class MetadataService {
             });
     }
 
-    setTitle(title: string, override = false): MetadataService {
+    setTitle(title: string, override = false) {
         const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
         switch (this.metadataSettings.pageTitlePositioning) {
@@ -53,11 +53,9 @@ export class MetadataService {
 
         ogTitleElement.setAttribute('content', title);
         this.titleService.setTitle(title);
-
-        return this;
     }
 
-    setTag(tag: string, value: string): MetadataService {
+    setTag(tag: string, value: string) {
         if (tag === 'title') {
             throw new Error(`Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
                 + `Please use 'MetadataService.setTitle' instead`);
@@ -66,7 +64,7 @@ export class MetadataService {
         value = !!value ? value : (this.metadataSettings.defaults[tag] || '');
 
         if (!value) {
-            return this;
+            return;
         }
 
         const tagElement = this.getOrCreateMetaTag(tag);
@@ -95,11 +93,9 @@ export class MetadataService {
             this.updateLocales(currentLocale, value);
             this.overrides['og:locale'] = true;
         }
-
-        return this;
     }
 
-    private createMetaTag(name: string) {
+    private createMetaTag(name: string): any {
         const el = this.document.createElement('meta');
         el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
         this.document.head.appendChild(el);
@@ -107,7 +103,7 @@ export class MetadataService {
         return el;
     }
 
-    private getOrCreateMetaTag(name: string) {
+    private getOrCreateMetaTag(name: string): any {
         let selector = `meta[name="${name}"]`;
 
         if (name.lastIndexOf('og:', 0) === 0) {
@@ -160,7 +156,7 @@ export class MetadataService {
         }
     }
 
-    private updateMetadata(metadata: any = {}, currentUrl: string) {
+    private updateMetadata(metadata: any = {}, currentUrl: string): boolean {
         if (metadata.disabled) {
             return false;
         }

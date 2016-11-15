@@ -1,6 +1,10 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.4] - 2016-11-15
+### Fixed
+- Fixed method signatures in `MetadataService`.
+
 ## [1.1.3] - 2016-11-15
 ### Added
 - Added HTML tag `lang` attribute generation (based on "og:locale" setting).
@@ -56,6 +60,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
+[1.1.4]: https://github.com/fulls1z3/ng2-metadata/compare/1.1.3...1.1.4
 [1.1.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.3
 [1.0.5]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.3...1.0.5
 [1.0.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.2...1.0.3
