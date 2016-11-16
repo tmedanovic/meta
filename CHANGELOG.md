@@ -1,6 +1,10 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2016-11-17
+### Added
+- Added metadata.json files for AoT.
+
 ## [1.1.4] - 2016-11-15
 ### Fixed
 - Fixed method signatures in `MetadataService`.

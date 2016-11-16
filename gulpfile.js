@@ -70,6 +70,16 @@ var ts = {
                 .pipe(debug('**/*.*'))
             ]).on('end', done);
         },
+        compile_aot: function(done) {
+            var exec = require('child_process').exec;
+
+            return exec('ngc -p "./tsconfig-aot.json"',
+                function(err, stdout, stderr) {
+                    console.log(stdout);
+                    console.log(stderr);
+                },
+                done);
+        },
         defs: function (done) {
             var dts = require('dts-bundle');
 
@@ -80,6 +90,12 @@ var ts = {
             });
 
             done();
+        },
+        metadata: function (done) {
+            return gulp.src('./build/aot/**/*.metadata.json')
+                .pipe(gulp.dest('./'))
+                .pipe(debug('**/*.*'))
+                .on('end', done);
         },
         bundle : function(done) {
             var ignoreDeps = {};
@@ -119,7 +135,9 @@ var ts = {
 };
 
 ts['ng2-metadata'].compile.displayName = 'compile:ts';
+ts['ng2-metadata'].compile_aot.displayName = 'compile-aot:ts';
 ts['ng2-metadata'].defs.displayName = 'def\'s:ts';
+ts['ng2-metadata'].metadata.displayName = 'metadata\'s:ts';
 ts['ng2-metadata'].bundle.displayName = 'bundle:ts';
 ts['ng2-metadata'].lint.displayName = 'lint:ts';
 
@@ -143,6 +161,12 @@ gulp.task('_DIST_',
         ts['ng2-metadata'].defs,
         ts['ng2-metadata'].bundle
     ));
+
+//*** _DIST_AOT_
+gulp.task('_DIST_AOT_', gulp.series(
+    ts['ng2-metadata'].compile_aot,
+    ts['ng2-metadata'].metadata
+));
 
 //*** Review
 gulp.task('review:ts',
