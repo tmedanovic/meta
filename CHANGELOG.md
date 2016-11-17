@@ -1,6 +1,10 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2016-11-17
+### Fixed
+- Fixed bugs when `MetadataModule` is called without arguments.
+
 ## [1.2.0] - 2016-11-17
 ### Added
 - Added metadata.json & *.d.ts files for AoT.
@@ -65,6 +69,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
+[1.2.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.1.3...1.2.0
 [1.1.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.3
 [1.0.5]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.3...1.0.5

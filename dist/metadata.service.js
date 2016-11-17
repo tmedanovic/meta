@@ -34,12 +34,20 @@ export var MetadataService = (function () {
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
         switch (this.metadataSettings.pageTitlePositioning) {
             case PageTitlePositioning.AppendPageTitle:
-                title = (!override ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator) : '')
-                    + (!!title ? title : this.metadataSettings.defaults['title']);
+                title = (!override
+                    && !!this.metadataSettings.pageTitleSeparator
+                    && !!this.metadataSettings.applicationName
+                    ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator)
+                    : '')
+                    + (!!title ? title : (this.metadataSettings.defaults['title'] || ''));
                 break;
             case PageTitlePositioning.PrependPageTitle:
-                title = (!!title ? title : this.metadataSettings.defaults['title'])
-                    + (!override ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName) : '');
+                title = (!!title ? title : (this.metadataSettings.defaults['title'] || ''))
+                    + (!override
+                        && !!this.metadataSettings.pageTitleSeparator
+                        && !!this.metadataSettings.applicationName
+                        ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName)
+                        : '');
                 break;
         }
         ogTitleElement.setAttribute('content', title);
@@ -50,7 +58,7 @@ export var MetadataService = (function () {
             throw new Error(("Attempt to set " + tag + " through 'setTag': 'title' is a reserved tag name. ")
                 + "Please use 'MetadataService.setTitle' instead");
         }
-        value = !!value ? value : (this.metadataSettings.defaults[tag] || '');
+        value = !!value ? value : this.metadataSettings.defaults[tag];
         if (!value) {
             return;
         }

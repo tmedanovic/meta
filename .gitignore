@@ -2,10 +2,10 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+/build
 /node_modules
 /obj/Debug
 /Properties
 /ng2-metadata.csproj
 /ng2-metadata.csproj.user
-/build
 /publishing.txt

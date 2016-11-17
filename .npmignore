@@ -1,5 +1,7 @@
 ﻿#dev stuff
+/.github
 /src
+.npmignore
 gulpfile.js
 tsconfig.json
 tsconfig-aot.json

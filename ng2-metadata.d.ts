@@ -51,8 +51,9 @@ declare module 'ng2-metadata/dist/metadata.service' {
 
 declare module 'ng2-metadata/dist/metadata.module' {
     import { ModuleWithProviders } from '@angular/core';
+    import { MetadataSettings } from 'ng2-metadata/dist/models/metadata-settings';
     export class MetadataModule {
-        static forRoot(metadataSettings?: any): ModuleWithProviders;
+        static forRoot(metadataSettings?: MetadataSettings): ModuleWithProviders;
     }
 }
 
