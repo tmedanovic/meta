@@ -1,1 +1,1 @@
-{"__symbolic":"module","version":1,"metadata":{},"exports":[{"from":"./src/models/page-title-positioning"},{"from":"./src/models/metadata-settings"},{"from":"./src/metadata.service"},{"from":"./src/metadata.module"}]}
+{"__symbolic":"module","version":1,"metadata":{},"exports":[{"from":"./dist/models/page-title-positioning"},{"from":"./dist/models/metadata-settings"},{"from":"./dist/metadata.service"},{"from":"./dist/metadata.module"}]}

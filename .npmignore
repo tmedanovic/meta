@@ -1,4 +1,7 @@
 ﻿#dev stuff
+/src
 gulpfile.js
 tsconfig.json
 tslint.json
+*.ts
+!*.d.ts

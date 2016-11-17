@@ -22,7 +22,7 @@ Add metadata inside the `data` property of routes.
 **Note:** meta properties such as `title`, `description`, `author` and `publisher` are duplicated as `og:title`, `og:description`, `og:author` and `og:publisher`, so there's no need to declare them again in this context.
 
 ```TypeScript
-const routes = [
+export const routes = [
   {
     path : 'home',
     component : HomeComponent,
@@ -110,7 +110,7 @@ The **default metadata settings** are used when a route doesn't contain any meta
 import { MetadataSettings, PageTitlePositioning, MetadataService } from 'ng2-meta';
 ...
 
-const metadataSettings: MetadataSettings = {
+export const metadataSettings: MetadataSettings = {
   pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
   pageTitleSeparator : ' - ',
   applicationName : 'Tour of (lazy/busy) heroes',

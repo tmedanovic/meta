@@ -5,22 +5,22 @@
 //   ../@angular/router
 
 declare module 'ng2-metadata' {
-    export { PageTitlePositioning } from 'ng2-metadata/models/page-title-positioning';
-    export { MetadataSettings } from 'ng2-metadata/models/metadata-settings';
-    export { MetadataService } from 'ng2-metadata/metadata.service';
-    export { MetadataModule } from 'ng2-metadata/metadata.module';
+    export * from 'ng2-metadata/dist/models/page-title-positioning';
+    export * from 'ng2-metadata/dist/models/metadata-settings';
+    export * from 'ng2-metadata/dist/metadata.service';
+    export * from 'ng2-metadata/dist/metadata.module';
 }
 
-declare module 'ng2-metadata/models/page-title-positioning' {
+declare module 'ng2-metadata/dist/models/page-title-positioning' {
     export enum PageTitlePositioning {
         AppendPageTitle = 0,
         PrependPageTitle = 10,
     }
 }
 
-declare module 'ng2-metadata/models/metadata-settings' {
+declare module 'ng2-metadata/dist/models/metadata-settings' {
     import { OpaqueToken } from '@angular/core';
-    import { PageTitlePositioning } from 'ng2-metadata/models/page-title-positioning';
+    import { PageTitlePositioning } from 'ng2-metadata/dist/models/page-title-positioning';
     export const METADATA_SETTINGS: OpaqueToken;
     export interface MetadataSettings {
         pageTitlePositioning: PageTitlePositioning;
@@ -36,12 +36,12 @@ declare module 'ng2-metadata/models/metadata-settings' {
     }
 }
 
-declare module 'ng2-metadata/metadata.service' {
+declare module 'ng2-metadata/dist/metadata.service' {
     import { Title } from '@angular/platform-browser';
     import { Router, ActivatedRoute } from '@angular/router';
     import 'rxjs/add/operator/filter';
     import 'rxjs/add/operator/map';
-    import { MetadataSettings } from 'ng2-metadata/models/metadata-settings';
+    import { MetadataSettings } from 'ng2-metadata/dist/models/metadata-settings';
     export class MetadataService {
         constructor(router: Router, document: any, titleService: Title, activatedRoute: ActivatedRoute, metadataSettings: MetadataSettings);
         setTitle(title: string, override?: boolean): void;
@@ -49,7 +49,7 @@ declare module 'ng2-metadata/metadata.service' {
     }
 }
 
-declare module 'ng2-metadata/metadata.module' {
+declare module 'ng2-metadata/dist/metadata.module' {
     import { ModuleWithProviders } from '@angular/core';
     export class MetadataModule {
         static forRoot(metadataSettings?: any): ModuleWithProviders;

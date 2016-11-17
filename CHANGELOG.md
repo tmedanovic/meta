@@ -3,7 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [1.2.0] - 2016-11-17
 ### Added
-- Added metadata.json files for AoT.
+- Added metadata.json & *.d.ts files for AoT.
+
+### Fixed
+- Fixed the AoT compilation issue (#2).
+- Fixed `isSet` behavior in `MetadataService`.
 
 ## [1.1.4] - 2016-11-15
 ### Fixed

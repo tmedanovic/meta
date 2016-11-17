@@ -14,7 +14,7 @@
     ]
   },
   "files": [
-    "./ng2-metadata.ts"
+    "./build/ng2-metadata.ts"
   ],
   "exclude": [
     "src/*",

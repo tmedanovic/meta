@@ -9,14 +9,14 @@ import { METADATA_SETTINGS, MetadataSettings } from './models/metadata-settings'
 
 @Injectable()
 export class MetadataService {
-    private overrides: any;
+    private isSet: any;
 
     constructor(private router: Router,
                 @Inject(DOCUMENT) private document: any,
                 private titleService: Title,
                 private activatedRoute: ActivatedRoute,
                 @Inject(METADATA_SETTINGS) private metadataSettings: MetadataSettings) {
-        this.overrides = {};
+        this.isSet = {};
 
         this.router.events
             .filter(event => (event instanceof NavigationEnd))
@@ -70,7 +70,7 @@ export class MetadataService {
         const tagElement = this.getOrCreateMetaTag(tag);
 
         tagElement.setAttribute('content', value);
-        this.overrides[tag] = true;
+        this.isSet[tag] = true;
 
         if (tag === 'description') {
             const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
@@ -85,13 +85,13 @@ export class MetadataService {
             const availableLocales = this.metadataSettings.defaults['og:locale:alternate'];
 
             this.updateLocales(value, availableLocales);
-            this.overrides['og:locale:alternate'] = true;
+            this.isSet['og:locale:alternate'] = true;
         } else if (tag === 'og:locale:alternate') {
             const ogLocaleElement = this.getOrCreateMetaTag('og:locale');
             const currentLocale = ogLocaleElement.getAttribute('content');
 
             this.updateLocales(currentLocale, value);
-            this.overrides['og:locale'] = true;
+            this.isSet['og:locale'] = true;
         }
     }
 
@@ -167,7 +167,7 @@ export class MetadataService {
             .forEach(key => {
                 let value = metadata[key];
 
-                if (key in this.overrides || key === 'title' || key === 'override') {
+                if (key === 'title' || key === 'override') {
                     return;
                 } else if (key === 'og:locale') {
                     value = value.replace(/-/g, '_');
@@ -185,7 +185,7 @@ export class MetadataService {
             .forEach(key => {
                 let value = this.metadataSettings.defaults[key];
 
-                if (key in this.overrides || key in metadata || key === 'title' || key === 'override') {
+                if (key in this.isSet || key in metadata || key === 'title' || key === 'override') {
                     return;
                 } else if (key === 'og:locale') {
                     value = value.replace(/-/g, '_');
