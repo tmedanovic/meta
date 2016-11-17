@@ -8,9 +8,6 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Fixed the AoT compilation issue ([#2](https://github.com/fulls1z3/ng2-metadata/issues/2)).
 - Fixed `isSet` behavior in `MetadataService`.
-
-## [1.1.4] - 2016-11-15
-### Fixed
 - Fixed method signatures in `MetadataService`.
 
 ## [1.1.3] - 2016-11-15
@@ -68,8 +65,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
-[1.2.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.1.4...1.2.0
-[1.1.4]: https://github.com/fulls1z3/ng2-metadata/compare/1.1.3...1.1.4
+[1.2.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.1.3...1.2.0
 [1.1.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.3
 [1.0.5]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.3...1.0.5
 [1.0.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.2...1.0.3
