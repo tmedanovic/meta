@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.2.1] - 2016-11-17
+### Added
+- Added warning when no page title specified.
+
 ### Fixed
 - Fixed bugs when `MetadataModule` is called without arguments.
 

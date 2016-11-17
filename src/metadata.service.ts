@@ -59,6 +59,10 @@ export class MetadataService {
                 break;
         }
 
+        if (!title) {
+            console.warn('WARNING: No "page title" specified.');
+        }
+
         ogTitleElement.setAttribute('content', title);
         this.titleService.setTitle(title);
     }
@@ -66,7 +70,7 @@ export class MetadataService {
     setTag(tag: string, value: string) {
         if (tag === 'title') {
             throw new Error(`Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
-                + `Please use 'MetadataService.setTitle' instead`);
+                + `Please use 'MetadataService.setTitle' instead.`);
         }
 
         value = !!value ? value : this.metadataSettings.defaults[tag];

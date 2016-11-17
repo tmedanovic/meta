@@ -50,13 +50,16 @@ export var MetadataService = (function () {
                         : '');
                 break;
         }
+        if (!title) {
+            console.warn('WARNING: No "page title" specified.');
+        }
         ogTitleElement.setAttribute('content', title);
         this.titleService.setTitle(title);
     };
     MetadataService.prototype.setTag = function (tag, value) {
         if (tag === 'title') {
             throw new Error(("Attempt to set " + tag + " through 'setTag': 'title' is a reserved tag name. ")
-                + "Please use 'MetadataService.setTitle' instead");
+                + "Please use 'MetadataService.setTitle' instead.");
         }
         value = !!value ? value : this.metadataSettings.defaults[tag];
         if (!value) {
