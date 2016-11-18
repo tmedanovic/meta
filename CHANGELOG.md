@@ -1,6 +1,13 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2016-11-18
+### Changed
+- Changed the default settings checks (moved from `MetadataModule` to `MetadataService`).
+
+### Fixed
+- Fixed the AoT compilation issue ([#2](https://github.com/fulls1z3/ng2-metadata/issues/2)).
+
 ## [1.2.1] - 2016-11-17
 ### Added
 - Added warning when no page title specified.
@@ -72,6 +79,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
+[1.2.2]: https://github.com/fulls1z3/ng2-metadata/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.1.3...1.2.0
 [1.1.3]: https://github.com/fulls1z3/ng2-metadata/compare/1.0.5...1.1.3
