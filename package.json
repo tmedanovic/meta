@@ -1,10 +1,11 @@
 {
   "name": "ng2-metadata",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Dynamic page title & meta tags generator for Angular2",
   "keywords": [
     "angular",
     "angular2",
+    "aot",
     "dom",
     "seo",
     "meta",
@@ -29,27 +30,25 @@
     "url": "https://github.com/fulls1z3/ng2-metadata"
   },
   "dependencies": {
-    "@angular/common": "~2.2.0",
-    "@angular/core": "~2.2.0",
-    "@angular/platform-browser": "~2.2.0",
-    "@angular/router": "~3.2.0",
+    "@angular/common": "~2.2.1",
+    "@angular/core": "~2.2.1",
+    "@angular/platform-browser": "~2.2.1",
+    "@angular/router": "~3.2.1",
 
     "rxjs": "5.0.0-beta.12"
   },
   "devDependencies": {
-    "@angular/compiler": "~2.2.0",
-    "@angular/compiler-cli": "~2.2.0",
-    "@angular/platform-server": "2.2.0",
+    "@angular/compiler": "~2.2.1",
+    "@angular/compiler-cli": "~2.2.1",
 
     "typescript": "^2.0.3",
     "tslint": "^3.15.1",
     "@types/core-js": "^0.9.34",
 
-    "child_process": "^1.0.2",
-
     "gulp": "gulpjs/gulp#4.0",
     "gulp-load-plugins": "^1.3.0",
     "lazypipe": "^1.0.1",
+    "gulp-exec": "^2.1.3",
     "merge2": "^1.0.2",
     "gulp-changed": "^1.3.2",
     "gulp-debug": "^2.1.2",

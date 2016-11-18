@@ -143,7 +143,7 @@ var ts = {
         copy_main_build: function (done) {
             return gulp.src('./ng2-metadata.ts')
                 .pipe(gulp.dest('./build'))
-                .pipe(debug('**/*.*'))
+                .pipe(debug())
                 .on('end', done);
         },
         copy_src_build: function (done) {
@@ -153,21 +153,28 @@ var ts = {
                 .on('end', done);
         },
         compile_aot: function(done) {
-            var exec = require('child_process').exec;
+            var options = {
+                continueOnError: false,
+                pipeStdout: false,
+                customTemplatingThing: 'test'
+            };
+            var reportOptions = {
+                err: true,
+                stderr: true,
+                stdout: true
+            }
 
-            return exec('ngc -p "./tsconfig-aot.json"',
-                function(err, stdout, stderr) {
-                    console.log(stdout);
-                    console.log(stderr);
-                },
-                done);
+            return gulp.src('./tsconfig-aot.json')
+              .pipe($.exec('ngc -p "./tsconfig-aot.json"', options))
+              .pipe($.exec.reporter(reportOptions))
+              .on('end', done);
         },
         copy_main_dist: function (done) {
             return gulp.src([
                     './build/aot/ng2-metadata.js'
             ])
                 .pipe(gulp.dest('./'))
-                .pipe(debug('**/*.*'))
+                .pipe(debug())
                 .on('end', done);
         },
         copy_build_dist: function (done) {

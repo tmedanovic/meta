@@ -32,23 +32,25 @@ export var MetadataService = (function () {
     MetadataService.prototype.setTitle = function (title, override) {
         if (override === void 0) { override = false; }
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
-        switch (this.metadataSettings.pageTitlePositioning) {
-            case PageTitlePositioning.AppendPageTitle:
-                title = (!override
-                    && !!this.metadataSettings.pageTitleSeparator
-                    && !!this.metadataSettings.applicationName
-                    ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator)
-                    : '')
-                    + (!!title ? title : (this.metadataSettings.defaults['title'] || ''));
-                break;
-            case PageTitlePositioning.PrependPageTitle:
-                title = (!!title ? title : (this.metadataSettings.defaults['title'] || ''))
-                    + (!override
+        if (!this.metadataSettings) {
+            switch (this.metadataSettings.pageTitlePositioning) {
+                case PageTitlePositioning.AppendPageTitle:
+                    title = (!override
                         && !!this.metadataSettings.pageTitleSeparator
                         && !!this.metadataSettings.applicationName
-                        ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName)
-                        : '');
-                break;
+                        ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator)
+                        : '')
+                        + (!!title ? title : (this.metadataSettings.defaults['title'] || ''));
+                    break;
+                case PageTitlePositioning.PrependPageTitle:
+                    title = (!!title ? title : (this.metadataSettings.defaults['title'] || ''))
+                        + (!override
+                            && !!this.metadataSettings.pageTitleSeparator
+                            && !!this.metadataSettings.applicationName
+                            ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName)
+                            : '');
+                    break;
+            }
         }
         if (!title) {
             console.warn('WARNING: No "page title" specified.');
@@ -61,7 +63,12 @@ export var MetadataService = (function () {
             throw new Error(("Attempt to set " + tag + " through 'setTag': 'title' is a reserved tag name. ")
                 + "Please use 'MetadataService.setTitle' instead.");
         }
-        value = !!value ? value : this.metadataSettings.defaults[tag];
+        value = !!value
+            ? value
+            : (this
+                .metadataSettings
+                ? (this.metadataSettings.defaults ? this.metadataSettings.defaults[tag] : '')
+                : '');
         if (!value) {
             return;
         }
@@ -81,7 +88,9 @@ export var MetadataService = (function () {
             ogPublisherElement.setAttribute('content', value);
         }
         else if (tag === 'og:locale') {
-            var availableLocales = this.metadataSettings.defaults['og:locale:alternate'];
+            var availableLocales = this.metadataSettings
+                ? (this.metadataSettings.defaults ? this.metadataSettings.defaults['og:locale:alternate'] : '')
+                : '';
             this.updateLocales(value, availableLocales);
             this.isSet['og:locale:alternate'] = true;
         }
@@ -125,7 +134,9 @@ export var MetadataService = (function () {
     MetadataService.prototype.updateLocales = function (currentLocale, availableLocales) {
         var _this = this;
         if (!currentLocale) {
-            currentLocale = this.metadataSettings.defaults['og:locale'];
+            currentLocale = this.metadataSettings
+                ? (this.metadataSettings.defaults ? this.metadataSettings.defaults['og:locale'] : '')
+                : '';
         }
         var html = this.document.querySelector('html');
         html.setAttribute('lang', currentLocale);
@@ -144,7 +155,7 @@ export var MetadataService = (function () {
         var _this = this;
         if (metadata === void 0) { metadata = {}; }
         if (metadata.disabled) {
-            return false;
+            return;
         }
         this.setTitle(metadata.title, metadata.override);
         Object.keys(metadata)
@@ -163,26 +174,30 @@ export var MetadataService = (function () {
             }
             _this.setTag(key, value);
         });
-        Object.keys(this.metadataSettings.defaults)
-            .forEach(function (key) {
-            var value = _this.metadataSettings.defaults[key];
-            if (key in _this.isSet || key in metadata || key === 'title' || key === 'override') {
-                return;
-            }
-            else if (key === 'og:locale') {
-                value = value.replace(/-/g, '_');
-            }
-            else if (key === 'og:locale:alternate') {
-                var currentLocale = metadata['og:locale'];
-                _this.updateLocales(currentLocale, _this.metadataSettings.defaults[key]);
-                return;
-            }
-            _this.setTag(key, value);
-        });
+        if (!this.metadataSettings) {
+            return;
+        }
+        if (!!this.metadataSettings.defaults) {
+            Object.keys(this.metadataSettings.defaults)
+                .forEach(function (key) {
+                var value = _this.metadataSettings.defaults[key];
+                if (key in _this.isSet || key in metadata || key === 'title' || key === 'override') {
+                    return;
+                }
+                else if (key === 'og:locale') {
+                    value = value.replace(/-/g, '_');
+                }
+                else if (key === 'og:locale:alternate') {
+                    var currentLocale = metadata['og:locale'];
+                    _this.updateLocales(currentLocale, _this.metadataSettings.defaults[key]);
+                    return;
+                }
+                _this.setTag(key, value);
+            });
+        }
         if (!!this.metadataSettings.applicationUrl) {
             this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl.replace(/\/$/g, ''));
         }
-        return true;
     };
     MetadataService.decorators = [
         { type: Injectable },

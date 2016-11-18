@@ -6,22 +6,10 @@ import { MetadataService } from './metadata.service';
 
 @NgModule()
 export class MetadataModule {
-    static forRoot(metadataSettings?: MetadataSettings): ModuleWithProviders {
-        if (!metadataSettings) {
-            metadataSettings = {
-                pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
-                defaults : {}
-            };
-        }
-
-        if (!metadataSettings.pageTitlePositioning) {
-            metadataSettings.pageTitlePositioning = PageTitlePositioning.PrependPageTitle;
-        }
-
-        if (!metadataSettings.defaults) {
-            metadataSettings.defaults = {};
-        }
-
+    static forRoot(metadataSettings: MetadataSettings = {
+                       pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
+                       defaults : {}
+                   }): ModuleWithProviders {
         return {
             ngModule : MetadataModule,
             providers : [

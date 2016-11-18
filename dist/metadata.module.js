@@ -6,18 +6,10 @@ export var MetadataModule = (function () {
     function MetadataModule() {
     }
     MetadataModule.forRoot = function (metadataSettings) {
-        if (!metadataSettings) {
-            metadataSettings = {
-                pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
-                defaults: {}
-            };
-        }
-        if (!metadataSettings.pageTitlePositioning) {
-            metadataSettings.pageTitlePositioning = PageTitlePositioning.PrependPageTitle;
-        }
-        if (!metadataSettings.defaults) {
-            metadataSettings.defaults = {};
-        }
+        if (metadataSettings === void 0) { metadataSettings = {
+            pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
+            defaults: {}
+        }; }
         return {
             ngModule: MetadataModule,
             providers: [

@@ -40,23 +40,25 @@ export class MetadataService {
     setTitle(title: string, override = false) {
         const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
-        switch (this.metadataSettings.pageTitlePositioning) {
-            case PageTitlePositioning.AppendPageTitle:
-                title = (!override
-                        && !!this.metadataSettings.pageTitleSeparator
-                        && !!this.metadataSettings.applicationName
-                        ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator)
-                        : '')
-                    + (!!title ? title : (this.metadataSettings.defaults['title'] || ''));
-                break;
-            case PageTitlePositioning.PrependPageTitle:
-                title = (!!title ? title : (this.metadataSettings.defaults['title'] || ''))
-                    + (!override
-                        && !!this.metadataSettings.pageTitleSeparator
-                        && !!this.metadataSettings.applicationName
-                        ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName)
-                        : '');
-                break;
+        if (!this.metadataSettings) {
+            switch (this.metadataSettings.pageTitlePositioning) {
+                case PageTitlePositioning.AppendPageTitle:
+                    title = (!override
+                            && !!this.metadataSettings.pageTitleSeparator
+                            && !!this.metadataSettings.applicationName
+                            ? (this.metadataSettings.applicationName + this.metadataSettings.pageTitleSeparator)
+                            : '')
+                        + (!!title ? title : (this.metadataSettings.defaults['title'] || ''));
+                    break;
+                case PageTitlePositioning.PrependPageTitle:
+                    title = (!!title ? title : (this.metadataSettings.defaults['title'] || ''))
+                        + (!override
+                            && !!this.metadataSettings.pageTitleSeparator
+                            && !!this.metadataSettings.applicationName
+                            ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName)
+                            : '');
+                    break;
+            }
         }
 
         if (!title) {
@@ -73,7 +75,12 @@ export class MetadataService {
                 + `Please use 'MetadataService.setTitle' instead.`);
         }
 
-        value = !!value ? value : this.metadataSettings.defaults[tag];
+        value = !!value
+            ? value
+            : (this
+                .metadataSettings
+                ? (this.metadataSettings.defaults ? this.metadataSettings.defaults[tag] : '')
+                : '');
 
         if (!value) {
             return;
@@ -94,7 +101,9 @@ export class MetadataService {
             const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
             ogPublisherElement.setAttribute('content', value);
         } else if (tag === 'og:locale') {
-            const availableLocales = this.metadataSettings.defaults['og:locale:alternate'];
+            const availableLocales = this.metadataSettings
+                ? (this.metadataSettings.defaults ? this.metadataSettings.defaults['og:locale:alternate'] : '')
+                : '';
 
             this.updateLocales(value, availableLocales);
             this.isSet['og:locale:alternate'] = true;
@@ -149,7 +158,9 @@ export class MetadataService {
 
     private updateLocales(currentLocale: string, availableLocales: any) {
         if (!currentLocale) {
-            currentLocale = this.metadataSettings.defaults['og:locale'];
+            currentLocale = this.metadataSettings
+                ? (this.metadataSettings.defaults ? this.metadataSettings.defaults['og:locale'] : '')
+                : '';
         }
 
         const html = this.document.querySelector('html');
@@ -168,9 +179,9 @@ export class MetadataService {
         }
     }
 
-    private updateMetadata(metadata: any = {}, currentUrl: string): boolean {
+    private updateMetadata(metadata: any = {}, currentUrl: string) {
         if (metadata.disabled) {
-            return false;
+            return;
         }
 
         this.setTitle(metadata.title, metadata.override);
@@ -193,28 +204,33 @@ export class MetadataService {
                 this.setTag(key, value);
             });
 
-        Object.keys(this.metadataSettings.defaults)
-            .forEach(key => {
-                let value = this.metadataSettings.defaults[key];
+        if (!this.metadataSettings) {
+            return;
+        }
 
-                if (key in this.isSet || key in metadata || key === 'title' || key === 'override') {
-                    return;
-                } else if (key === 'og:locale') {
-                    value = value.replace(/-/g, '_');
-                } else if (key === 'og:locale:alternate') {
-                    const currentLocale = metadata['og:locale'];
-                    this.updateLocales(currentLocale, this.metadataSettings.defaults[key]);
+        if (!!this.metadataSettings.defaults) {
+            Object.keys(this.metadataSettings.defaults)
+                .forEach(key => {
 
-                    return;
-                }
+                    let value = this.metadataSettings.defaults[key];
 
-                this.setTag(key, value);
-            });
+                    if (key in this.isSet || key in metadata || key === 'title' || key === 'override') {
+                        return;
+                    } else if (key === 'og:locale') {
+                        value = value.replace(/-/g, '_');
+                    } else if (key === 'og:locale:alternate') {
+                        const currentLocale = metadata['og:locale'];
+                        this.updateLocales(currentLocale, this.metadataSettings.defaults[key]);
+
+                        return;
+                    }
+
+                    this.setTag(key, value);
+                });
+        }
 
         if (!!this.metadataSettings.applicationUrl) {
             this.setTag('og:url', this.metadataSettings.applicationUrl + currentUrl.replace(/\/$/g, ''));
         }
-
-        return true;
     }
 }
