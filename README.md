@@ -101,9 +101,9 @@ export class AppComponent {
 Holy cow! **`ng2-metadata`** will update the page title & meta tags every time the route changes.
 
 ## Settings
-You can import the **MetadataModule** using **default metadata settings**.
+You can import the **MetadataModule** using the `MetadataStaticLoader`. By default, it is configured to **`prepend page titles`** after the `application name` (if any set). These **default metadata settings** are used when a route doesn't contain any metadata in its `data` property.
 
-The **default metadata settings** are used when a route doesn't contain any metadata in its `data` property.
+You can customize this behavior (and ofc other settings) by configuring a custom `MetadataLoader`, and supplying respective values. The following example shows the use of an exported function (instead of an inline function) for [AoT compilation].
 
 ```TypeScript
 ...
@@ -139,7 +139,7 @@ export function createMetadataLoader() {
     MetadataModule.forRoot({
       provide: MetadataLoader,
       useFactory: (createMetadataLoader)
-    }),
+    })
   ],
   bootstrap: [AppComponent]
 })
@@ -172,3 +172,5 @@ export class ItemComponent implements OnInit {
 The MIT License (MIT)
 
 Copyright © 2016 [Burak Tasci](http://www.buraktasci.com)
+
+[AoT compilation]: https://angular.io/docs/ts/latest/cookbook/aot-compiler.html
