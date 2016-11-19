@@ -2,8 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [1.3.0] - 2016-11-18
-### Changed
-- Changed the module loader for AoT compilation.
+### Added
+- Added the module loader for default metadata settings during AoT compilation.
 
 ### Fixed
 - Fixed the AoT compilation issue ([#2](https://github.com/fulls1z3/ng2-metadata/issues/2)).
