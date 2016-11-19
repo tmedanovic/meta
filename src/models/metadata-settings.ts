@@ -1,7 +1,4 @@
-import { OpaqueToken } from '@angular/core';
 import { PageTitlePositioning } from './page-title-positioning';
-
-export const METADATA_SETTINGS = new OpaqueToken('metadata_settings');
 
 export interface MetadataSettings {
     /**

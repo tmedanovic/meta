@@ -19,16 +19,15 @@ export var MetadataStaticLoader = (function () {
     return MetadataStaticLoader;
 }());
 export var MetadataService = (function () {
-    function MetadataService(router, document, titleService, activatedRoute, currentLoader) {
+    function MetadataService(router, document, titleService, activatedRoute, loader) {
         var _this = this;
         this.router = router;
         this.document = document;
         this.titleService = titleService;
         this.activatedRoute = activatedRoute;
-        this.currentLoader = currentLoader;
-        this.metadataSettings = currentLoader.getSettings();
-        console.log(this.metadataSettings);
-        this.isSet = {};
+        this.loader = loader;
+        this.metadataSettings = loader.getSettings();
+        this.isMetadataSet = {};
         this.router.events
             .filter(function (event) { return (event instanceof NavigationEnd); })
             .subscribe(function (routeData) {
@@ -47,7 +46,7 @@ export var MetadataService = (function () {
     MetadataService.prototype.setTitle = function (title, override) {
         if (override === void 0) { override = false; }
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
-        if (!this.metadataSettings) {
+        if (!!this.metadataSettings) {
             switch (this.metadataSettings.pageTitlePositioning) {
                 case PageTitlePositioning.AppendPageTitle:
                     title = (!override
@@ -80,8 +79,7 @@ export var MetadataService = (function () {
         }
         value = !!value
             ? value
-            : (this
-                .metadataSettings
+            : (this.metadataSettings
                 ? (this.metadataSettings.defaults ? this.metadataSettings.defaults[tag] : '')
                 : '');
         if (!value) {
@@ -89,7 +87,7 @@ export var MetadataService = (function () {
         }
         var tagElement = this.getOrCreateMetaTag(tag);
         tagElement.setAttribute('content', value);
-        this.isSet[tag] = true;
+        this.isMetadataSet[tag] = true;
         if (tag === 'description') {
             var ogDescriptionElement = this.getOrCreateMetaTag('og:description');
             ogDescriptionElement.setAttribute('content', value);
@@ -107,13 +105,13 @@ export var MetadataService = (function () {
                 ? (this.metadataSettings.defaults ? this.metadataSettings.defaults['og:locale:alternate'] : '')
                 : '';
             this.updateLocales(value, availableLocales);
-            this.isSet['og:locale:alternate'] = true;
+            this.isMetadataSet['og:locale:alternate'] = true;
         }
         else if (tag === 'og:locale:alternate') {
             var ogLocaleElement = this.getOrCreateMetaTag('og:locale');
             var currentLocale = ogLocaleElement.getAttribute('content');
             this.updateLocales(currentLocale, value);
-            this.isSet['og:locale'] = true;
+            this.isMetadataSet['og:locale'] = true;
         }
     };
     MetadataService.prototype.createMetaTag = function (name) {
@@ -196,7 +194,7 @@ export var MetadataService = (function () {
             Object.keys(this.metadataSettings.defaults)
                 .forEach(function (key) {
                 var value = _this.metadataSettings.defaults[key];
-                if (key in _this.isSet || key in metadata || key === 'title' || key === 'override') {
+                if (key in _this.isMetadataSet || key in metadata || key === 'title' || key === 'override') {
                     return;
                 }
                 else if (key === 'og:locale') {

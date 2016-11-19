@@ -5,7 +5,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
 import { PageTitlePositioning } from './models/page-title-positioning';
-import { METADATA_SETTINGS, MetadataSettings } from './models/metadata-settings';
+import { MetadataSettings } from './models/metadata-settings';
 
 export abstract class MetadataLoader {
     abstract getSettings(): MetadataSettings;
@@ -22,17 +22,15 @@ export class MetadataStaticLoader implements MetadataLoader {
 @Injectable()
 export class MetadataService {
     private metadataSettings: any;
-    private isSet: any;
+    private isMetadataSet: any;
 
     constructor(private router: Router,
                 @Inject(DOCUMENT) private document: any,
                 private titleService: Title,
                 private activatedRoute: ActivatedRoute,
-                //@Inject(METADATA_SETTINGS) private metadataSettings: MetadataSettings) {
-                private currentLoader: MetadataLoader) {
-        this.metadataSettings = currentLoader.getSettings();
-        console.log(this.metadataSettings);
-        this.isSet = {};
+                private loader: MetadataLoader) {
+        this.metadataSettings = loader.getSettings();
+        this.isMetadataSet = {};
 
         this.router.events
             .filter(event => (event instanceof NavigationEnd))
@@ -56,7 +54,7 @@ export class MetadataService {
     setTitle(title: string, override = false) {
         const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
-        if (!this.metadataSettings) {
+        if (!!this.metadataSettings) {
             switch (this.metadataSettings.pageTitlePositioning) {
                 case PageTitlePositioning.AppendPageTitle:
                     title = (!override
@@ -93,8 +91,7 @@ export class MetadataService {
 
         value = !!value
             ? value
-            : (this
-                .metadataSettings
+            : (this.metadataSettings
                 ? (this.metadataSettings.defaults ? this.metadataSettings.defaults[tag] : '')
                 : '');
 
@@ -105,7 +102,7 @@ export class MetadataService {
         const tagElement = this.getOrCreateMetaTag(tag);
 
         tagElement.setAttribute('content', value);
-        this.isSet[tag] = true;
+        this.isMetadataSet[tag] = true;
 
         if (tag === 'description') {
             const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
@@ -122,13 +119,13 @@ export class MetadataService {
                 : '';
 
             this.updateLocales(value, availableLocales);
-            this.isSet['og:locale:alternate'] = true;
+            this.isMetadataSet['og:locale:alternate'] = true;
         } else if (tag === 'og:locale:alternate') {
             const ogLocaleElement = this.getOrCreateMetaTag('og:locale');
             const currentLocale = ogLocaleElement.getAttribute('content');
 
             this.updateLocales(currentLocale, value);
-            this.isSet['og:locale'] = true;
+            this.isMetadataSet['og:locale'] = true;
         }
     }
 
@@ -230,7 +227,7 @@ export class MetadataService {
 
                     let value = this.metadataSettings.defaults[key];
 
-                    if (key in this.isSet || key in metadata || key === 'title' || key === 'override') {
+                    if (key in this.isMetadataSet || key in metadata || key === 'title' || key === 'override') {
                         return;
                     } else if (key === 'og:locale') {
                         value = value.replace(/-/g, '_');

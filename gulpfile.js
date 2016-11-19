@@ -171,7 +171,7 @@ var ts = {
         },
         copy_main_dist: function (done) {
             return gulp.src([
-                    './build/aot/ng2-metadata.js'
+                    './build/ngfactory/ng2-metadata.js'
             ])
                 .pipe(gulp.dest('./'))
                 .pipe(debug())
@@ -179,7 +179,7 @@ var ts = {
         },
         copy_build_dist: function (done) {
             return gulp.src([
-                    './build/aot/dist/**/*.js',
+                    './build/ngfactory/dist/**/*.js',
                     './build/dist/**/*.d.ts'
                 ])
                 .pipe(gulp.dest('./dist'))
@@ -187,7 +187,7 @@ var ts = {
                 .on('end', done);
         },
         copy_metadata_dist: function (done) {
-            return gulp.src('./build/aot/**/*.metadata.json')
+            return gulp.src('./build/ngfactory/**/*.metadata.json')
                 .pipe(gulp.dest('./'))
                 .pipe(debug('**/*.*'))
                 .on('end', done);

@@ -8,7 +8,7 @@
     "removeComments": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "outDir": "build/aot",
+    "outDir": "build/ngfactory",
     "typeRoots": [
       "./node_modules/@types/"
     ]

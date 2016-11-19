@@ -16,10 +16,10 @@ export declare class MetadataService {
     private document;
     private titleService;
     private activatedRoute;
-    private currentLoader;
+    private loader;
     private metadataSettings;
-    private isSet;
-    constructor(router: Router, document: any, titleService: Title, activatedRoute: ActivatedRoute, currentLoader: MetadataLoader);
+    private isMetadataSet;
+    constructor(router: Router, document: any, titleService: Title, activatedRoute: ActivatedRoute, loader: MetadataLoader);
     setTitle(title: string, override?: boolean): void;
     setTag(tag: string, value: string): void;
     private createMetaTag(name);

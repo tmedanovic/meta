@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PageTitlePositioning } from './models/page-title-positioning';
-import { MetadataLoader, MetadataStaticLoader } from './metadata.service';
-import { MetadataService } from './metadata.service';
+import { MetadataLoader, MetadataStaticLoader, MetadataService } from './metadata.service';
 export function metadataLoaderFactory() {
     return new MetadataStaticLoader({
         pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
