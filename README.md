@@ -107,11 +107,11 @@ The **default metadata settings** are used when a route doesn't contain any meta
 
 ```TypeScript
 ...
-import { MetadataSettings, PageTitlePositioning, MetadataService } from 'ng2-meta';
+import { MetadataLoader, MetadataStaticLoader, PageTitlePositioning, MetadataService } from 'ng2-metadata';
 ...
 
-export function createMetadataSettings() {
-  return {
+export function createMetadataLoader() {
+  return new MetadataStaticLoader({
     pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
     pageTitleSeparator : ' - ',
     applicationName : 'Tour of (lazy/busy) heroes',
@@ -121,9 +121,9 @@ export function createMetadataSettings() {
       'og:image' : 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg'
       'og:type' : 'website',
       'og:locale' : 'en_US',
-	  'og:locale:alternate' : 'nl_NL,tr_TR'
+      'og:locale:alternate' : 'nl_NL,tr_TR'
     }
-  };
+  });
 }
 
 ...
@@ -137,8 +137,8 @@ export function createMetadataSettings() {
     ...
     RouterModule.forRoot(routes),
     MetadataModule.forRoot({
-      provide: METADATA_SETTINGS,
-      useFactory: (createMetadataSettings)
+      provide: MetadataLoader,
+      useFactory: (createMetadataLoader)
     }),
   ],
   bootstrap: [AppComponent]
