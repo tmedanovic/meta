@@ -51,9 +51,13 @@ declare module 'ng2-metadata/dist/metadata.service' {
 
 declare module 'ng2-metadata/dist/metadata.module' {
     import { ModuleWithProviders } from '@angular/core';
-    import { MetadataSettings } from 'ng2-metadata/dist/models/metadata-settings';
+    import { PageTitlePositioning } from 'ng2-metadata/dist/models/page-title-positioning';
+    export function createMetadataSettings(): {
+        pageTitlePositioning: PageTitlePositioning;
+        defaults: {};
+    };
     export class MetadataModule {
-        static forRoot(metadataSettings?: MetadataSettings): ModuleWithProviders;
+        static forRoot(metadataSettings?: any): ModuleWithProviders;
     }
 }
 

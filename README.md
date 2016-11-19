@@ -110,19 +110,21 @@ The **default metadata settings** are used when a route doesn't contain any meta
 import { MetadataSettings, PageTitlePositioning, MetadataService } from 'ng2-meta';
 ...
 
-export const metadataSettings: MetadataSettings = {
-  pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
-  pageTitleSeparator : ' - ',
-  applicationName : 'Tour of (lazy/busy) heroes',
-  defaults : {
-    title : 'Mighty mighty mouse',
-    description : 'Mighty Mouse is an animated superhero mouse character',
-    'og:image' : 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg'
-    'og:type' : 'website',
-    'og:locale' : 'en_US',
-	'og:locale:alternate' : 'nl_NL,tr_TR'
-  }
-};
+export function createMetadataSettings() {
+  return {
+    pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
+    pageTitleSeparator : ' - ',
+    applicationName : 'Tour of (lazy/busy) heroes',
+    defaults : {
+      title : 'Mighty mighty mouse',
+      description : 'Mighty Mouse is an animated superhero mouse character',
+      'og:image' : 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg'
+      'og:type' : 'website',
+      'og:locale' : 'en_US',
+	  'og:locale:alternate' : 'nl_NL,tr_TR'
+    }
+  };
+}
 
 ...
 
@@ -134,7 +136,10 @@ export const metadataSettings: MetadataSettings = {
   imports: [
     ...
     RouterModule.forRoot(routes),
-    MetadataModule.forRoot(metadataSettings)
+    MetadataModule.forRoot({
+      provide: METADATA_SETTINGS,
+      useFactory: (createMetadataSettings)
+    }),
   ],
   bootstrap: [AppComponent]
 })
