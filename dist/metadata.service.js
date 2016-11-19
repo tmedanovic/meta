@@ -4,15 +4,30 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import { PageTitlePositioning } from './models/page-title-positioning';
-import { METADATA_SETTINGS } from './models/metadata-settings';
+export var MetadataLoader = (function () {
+    function MetadataLoader() {
+    }
+    return MetadataLoader;
+}());
+export var MetadataStaticLoader = (function () {
+    function MetadataStaticLoader(metadataSettings) {
+        this.metadataSettings = metadataSettings;
+    }
+    MetadataStaticLoader.prototype.getSettings = function () {
+        return this.metadataSettings;
+    };
+    return MetadataStaticLoader;
+}());
 export var MetadataService = (function () {
-    function MetadataService(router, document, titleService, activatedRoute, metadataSettings) {
+    function MetadataService(router, document, titleService, activatedRoute, currentLoader) {
         var _this = this;
         this.router = router;
         this.document = document;
         this.titleService = titleService;
         this.activatedRoute = activatedRoute;
-        this.metadataSettings = metadataSettings;
+        this.currentLoader = currentLoader;
+        this.metadataSettings = currentLoader.getSettings();
+        console.log(this.metadataSettings);
         this.isSet = {};
         this.router.events
             .filter(function (event) { return (event instanceof NavigationEnd); })
@@ -207,7 +222,7 @@ export var MetadataService = (function () {
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
         { type: Title, },
         { type: ActivatedRoute, },
-        { type: undefined, decorators: [{ type: Inject, args: [METADATA_SETTINGS,] },] },
+        { type: MetadataLoader, },
     ];
     return MetadataService;
 }());

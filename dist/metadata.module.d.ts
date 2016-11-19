@@ -1,9 +1,6 @@
 import { ModuleWithProviders } from '@angular/core';
-import { PageTitlePositioning } from './models/page-title-positioning';
-export declare function createMetadataSettings(): {
-    pageTitlePositioning: PageTitlePositioning;
-    defaults: {};
-};
+import { MetadataStaticLoader } from './metadata.service';
+export declare function metadataLoaderFactory(): MetadataStaticLoader;
 export declare class MetadataModule {
-    static forRoot(metadataSettings?: any): ModuleWithProviders;
+    static forRoot(providedLoader?: any): ModuleWithProviders;
 }

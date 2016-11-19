@@ -1,26 +1,26 @@
 import { NgModule } from '@angular/core';
 import { PageTitlePositioning } from './models/page-title-positioning';
-import { METADATA_SETTINGS } from './models/metadata-settings';
+import { MetadataLoader, MetadataStaticLoader } from './metadata.service';
 import { MetadataService } from './metadata.service';
-export function createMetadataSettings() {
-    return {
+export function metadataLoaderFactory() {
+    return new MetadataStaticLoader({
         pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
         defaults: {}
-    };
+    });
 }
 export var MetadataModule = (function () {
     function MetadataModule() {
     }
-    MetadataModule.forRoot = function (metadataSettings) {
-        if (metadataSettings === void 0) { metadataSettings = {
-            provide: METADATA_SETTINGS,
-            useFactory: (createMetadataSettings)
+    MetadataModule.forRoot = function (providedLoader) {
+        if (providedLoader === void 0) { providedLoader = {
+            provide: MetadataLoader,
+            useFactory: (metadataLoaderFactory)
         }; }
         return {
             ngModule: MetadataModule,
             providers: [
-                metadataSettings,
-                MetadataService,
+                providedLoader,
+                MetadataService
             ]
         };
     };

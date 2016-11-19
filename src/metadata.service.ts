@@ -7,15 +7,31 @@ import 'rxjs/add/operator/map';
 import { PageTitlePositioning } from './models/page-title-positioning';
 import { METADATA_SETTINGS, MetadataSettings } from './models/metadata-settings';
 
+export abstract class MetadataLoader {
+    abstract getSettings(): MetadataSettings;
+}
+
+export class MetadataStaticLoader implements MetadataLoader {
+    constructor(private metadataSettings: MetadataSettings) {}
+
+    getSettings(): MetadataSettings {
+        return this.metadataSettings;
+    }
+}
+
 @Injectable()
 export class MetadataService {
+    private metadataSettings: any;
     private isSet: any;
 
     constructor(private router: Router,
                 @Inject(DOCUMENT) private document: any,
                 private titleService: Title,
                 private activatedRoute: ActivatedRoute,
-                @Inject(METADATA_SETTINGS) private metadataSettings: MetadataSettings) {
+                //@Inject(METADATA_SETTINGS) private metadataSettings: MetadataSettings) {
+                private currentLoader: MetadataLoader) {
+        this.metadataSettings = currentLoader.getSettings();
+        console.log(this.metadataSettings);
         this.isSet = {};
 
         this.router.events

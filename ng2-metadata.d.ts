@@ -42,8 +42,15 @@ declare module 'ng2-metadata/dist/metadata.service' {
     import 'rxjs/add/operator/filter';
     import 'rxjs/add/operator/map';
     import { MetadataSettings } from 'ng2-metadata/dist/models/metadata-settings';
+    export abstract class MetadataLoader {
+        abstract getSettings(): MetadataSettings;
+    }
+    export class MetadataStaticLoader implements MetadataLoader {
+        constructor(metadataSettings: MetadataSettings);
+        getSettings(): MetadataSettings;
+    }
     export class MetadataService {
-        constructor(router: Router, document: any, titleService: Title, activatedRoute: ActivatedRoute, metadataSettings: MetadataSettings);
+        constructor(router: Router, document: any, titleService: Title, activatedRoute: ActivatedRoute, currentLoader: MetadataLoader);
         setTitle(title: string, override?: boolean): void;
         setTag(tag: string, value: string): void;
     }
@@ -51,13 +58,10 @@ declare module 'ng2-metadata/dist/metadata.service' {
 
 declare module 'ng2-metadata/dist/metadata.module' {
     import { ModuleWithProviders } from '@angular/core';
-    import { PageTitlePositioning } from 'ng2-metadata/dist/models/page-title-positioning';
-    export function createMetadataSettings(): {
-        pageTitlePositioning: PageTitlePositioning;
-        defaults: {};
-    };
+    import { MetadataStaticLoader } from 'ng2-metadata/dist/metadata.service';
+    export function metadataLoaderFactory(): MetadataStaticLoader;
     export class MetadataModule {
-        static forRoot(metadataSettings?: any): ModuleWithProviders;
+        static forRoot(providedLoader?: any): ModuleWithProviders;
     }
 }
 
