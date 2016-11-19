@@ -19,8 +19,5 @@
   "exclude": [
     "src/*",
     "node_modules/*"
-  ],
-  "angularCompilerOptions": {
-    "genDir": "build/aot"
-  }
+  ]
 }
