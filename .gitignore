@@ -10,5 +10,6 @@ ng2-metadata.csproj.user
 publishing.txt
 *.js
 !gulpfile.js
+!webpack.config.js
 *.d.ts
 *.metadata.json
