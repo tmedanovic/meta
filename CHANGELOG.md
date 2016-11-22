@@ -1,7 +1,7 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.0] - 2016-11-18
+## [1.3.0] - 2016-11-22
 ### Added
 - Added the module loader for default metadata settings during AoT compilation.
 
