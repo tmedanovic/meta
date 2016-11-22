@@ -5,8 +5,11 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Added the module loader for default metadata settings during AoT compilation.
 
+### Changed
+- Changed bundle for Webpack ([#1](https://github.com/fulls1z3/ng2-metadata/issues/1)).
+
 ### Fixed
-- Fixed the AoT compilation issue ([#2](https://github.com/fulls1z3/ng2-metadata/issues/2)).
+- Fixed AoT compilation issue(s) ([#2](https://github.com/fulls1z3/ng2-metadata/issues/2)).
 
 ## [1.2.2] - 2016-11-18
 ### Changed
