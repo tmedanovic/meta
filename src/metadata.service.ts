@@ -12,7 +12,10 @@ export abstract class MetadataLoader {
 }
 
 export class MetadataStaticLoader implements MetadataLoader {
-    constructor(private metadataSettings: MetadataSettings) {}
+    constructor(private metadataSettings: MetadataSettings = {
+        pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
+        defaults : {}
+    }) {}
 
     getSettings(): MetadataSettings {
         return this.metadataSettings;

@@ -1,13 +1,13 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { PageTitlePositioning } from './models/page-title-positioning';
-import { MetadataLoader, MetadataStaticLoader, MetadataService } from './metadata.service';
+import { MetadataLoader, MetadataStaticLoader, MetadataService } from './src/metadata.service';
+
+export * from './src/models/page-title-positioning';
+export * from './src/models/metadata-settings';
+export * from './src/metadata.service';
 
 export function metadataLoaderFactory() {
-    return new MetadataStaticLoader({
-        pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
-        defaults : {}
-    });
+    return new MetadataStaticLoader();
 }
 
 @NgModule()

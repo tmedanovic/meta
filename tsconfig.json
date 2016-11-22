@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -13,9 +13,19 @@
       "./node_modules/@types/"
     ]
   },
+  "files": [
+    "index.ts",
+    "./src/models/page-title-positioning",
+    "./src/models/metadata-settings.ts",
+    "./src/metadata.service.ts"
+  ],
   "compileOnSave": false,
   "exclude": [
-    "src/*",
-    "node_modules/*"
-  ]
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true
+  }
 }

@@ -2,10 +2,13 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/build
+/bundles
 /node_modules
 /obj/Debug
-/Properties
-/ng2-metadata.csproj
-/ng2-metadata.csproj.user
-/publishing.txt
+ng2-metadata.csproj
+ng2-metadata.csproj.user
+publishing.txt
+*.js
+!gulpfile.js
+*.d.ts
+*.metadata.json

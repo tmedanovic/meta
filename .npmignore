@@ -1,11 +1,17 @@
 ﻿#dev stuff
 /.github
-/src
+/config
+/node_modules
+/obj/Debug
+.gitignore
 .npmignore
 .travis.yml
 gulpfile.js
+ng2-metadata.csproj
+ng2-metadata.csproj.user
+publishing.txt
 tsconfig.json
-tsconfig-aot.json
 tslint.json
+webpack.config.js
 *.ts
 !*.d.ts

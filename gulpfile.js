@@ -39,25 +39,57 @@ var clean = {
     'temp' : function(done) {
         $.rimraf('./temp', done);
     },
-    'build' : function(done) {
-        $.rimraf('./build', done);
+    //'build' : function(done) {
+    //    $.rimraf('./build', done);
+    //},
+    //'dist' : function(done) {
+    //    $.rimraf('./dist', done);
+    //},
+    'bundles' : function(done) {
+        $.rimraf('./bundles', done);
     },
-    'dist' : function(done) {
-        $.rimraf('./dist', done);
+    'index.js': function (done) {
+        $.rimraf('./index.js', done);
+    },
+    'index.d.ts': function (done) {
+        $.rimraf('./index.d.ts', done);
+    },
+    'index.metadata.json': function (done) {
+        $.rimraf('./index.metadata.json', done);
+    },
+    'ng2-metadata.js': function (done) {
+        $.rimraf('./ng2-metadata.js', done);
     },
     'ng2-metadata.d.ts' : function(done) {
         $.rimraf('./ng2-metadata.d.ts', done);
     },
     'ng2-metadata.metadata.json' : function(done) {
         $.rimraf('./ng2-metadata.metadata.json', done);
+    },
+    'src/*.js': function (done) {
+        $.rimraf('./src/**/*.js', done);
+    },
+    'src/*.d.ts': function (done) {
+        $.rimraf('./src/**/*.d.ts', done);
+    },
+    'src/*.metadata.json': function (done) {
+        $.rimraf('./src/**/*.metadata.json', done);
     }
 };
 
 clean['temp'].displayName = 'clean:./temp/**';
-clean['build'].displayName = 'clean:./build/**';
-clean['dist'].displayName = 'clean:./dist/**';
+//clean['build'].displayName = 'clean:./build/**';
+//clean['dist'].displayName = 'clean:./dist/**';
+clean['bundles'].displayName = 'clean:./bundles/**';
+clean['index.js'].displayName = 'clean:./index.js';
+clean['index.d.ts'].displayName = 'clean:./index.d.ts';
+clean['index.metadata.json'].displayName = 'clean:./index.metadata.json';
+clean['ng2-metadata.js'].displayName = 'clean:./ng2-metadata.js';
 clean['ng2-metadata.d.ts'].displayName = 'clean:./ng2-metadata.d.ts';
 clean['ng2-metadata.metadata.json'].displayName = 'clean:./ng2-metadata.metadata.json';
+clean['src/*.js'].displayName = 'clean:./src/*.js';
+clean['src/*.d.ts'].displayName = 'clean:./src/*.js';
+clean['src/*.metadata.json'].displayName = 'clean:./src/*.js';
 
 // TypeScript
 var ts = {
@@ -217,10 +249,17 @@ ts['ng2-metadata'].lint.displayName = 'lint:ts';
 gulp.task('__CLEAN__',
     gulp.parallel(
         clean['temp'],
-        clean['build'],
-        clean['dist'],
+        clean['bundles'],
+        //clean['dist'],
+        clean['index.js'],
+        clean['index.d.ts'],
+        clean['index.metadata.json'],
+        clean['ng2-metadata.js'],
         clean['ng2-metadata.d.ts'],
-        clean['ng2-metadata.metadata.json']
+        clean['ng2-metadata.metadata.json'],
+        clean['src/*.js'],
+        clean['src/*.d.ts'],
+        clean['src/*.metadata.json']
     ));
 
 //*** _BUILD_
@@ -228,8 +267,8 @@ gulp.task('_BUILD_',
     gulp.series(
         ts['ng2-metadata'].compile_src,
         ts['ng2-metadata'].copy_src_dist,
-        ts['ng2-metadata'].compile_main,
-        clean['dist']
+        ts['ng2-metadata'].compile_main
+        //clean['dist']
     ));
 
 //*** _BUILD_UMD_
@@ -256,12 +295,68 @@ gulp.task('__DIST__',
         '_BUILD_AoT_',
         ts['ng2-metadata'].copy_main_dist,
         ts['ng2-metadata'].copy_build_dist,
-        ts['ng2-metadata'].copy_metadata_dist,
-        clean['build']
+        ts['ng2-metadata'].copy_metadata_dist
+        //clean['build']
     ));
 
 //*** Review
 gulp.task('review:ts',
     gulp.parallel(
         ts['ng2-metadata'].lint
+    ));
+
+var bundle = function (done) {
+    const webpack = require('webpack');
+    const webpackStream = require('webpack-stream');
+
+    const conf = require('./webpack.config.js');
+
+    return gulp.src('./index.ts')
+                .pipe(webpackStream(conf, webpack))
+                .pipe(gulp.dest('./bundles'))
+                .on('end', done);
+}
+
+//*** ____TEST_webpack____
+gulp.task('____TEST_webpack____',
+    gulp.series(
+        bundle
+    ));
+
+var compile = function(done) {
+    const options = {
+        continueOnError: false,
+        pipeStdout: false,
+        customTemplatingThing: 'test'
+    };
+    const reportOptions = {
+        err: true,
+        stderr: true,
+        stdout: true
+    };
+
+    return gulp.src('./tsconfig.json')
+      .pipe($.exec('ngc -p "./tsconfig.json"', options))
+      .pipe($.exec.reporter(reportOptions))
+      .on('end', done);
+}
+
+var dts = function (done) {
+    const dts = require('dts-bundle');
+
+    dts.bundle({
+        name: 'ng2-metadata',
+        main: './index.d.ts',
+        out: './index.d.ts'
+    });
+
+    done();
+}
+
+//*** ____TEST_AoT____
+gulp.task('____TEST_AoT____',
+    gulp.series(
+        '__CLEAN__',
+        compile//,
+        //dts
     ));
