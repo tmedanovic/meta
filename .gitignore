@@ -9,6 +9,7 @@ ng2-metadata.csproj
 ng2-metadata.csproj.user
 publishing.txt
 *.js
+!helpers.js
 !gulpfile.js
 !webpack.config.js
 *.d.ts
