@@ -1,10 +1,13 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.3.1] - 2016-11-24
+## [1.3.4] - 2016-11-24
 ### Changed
 - Updated to tslint v4.0.2
 - Changed tslint.json
+
+## 1.3.1 - 2016-11-24
+- pre-release
 
 ## [1.3.0] - 2016-11-22
 ### Added
@@ -94,7 +97,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
-[1.3.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.3.0...1.3.1
+[1.3.4]: https://github.com/fulls1z3/ng2-metadata/compare/1.3.0...1.3.4
 [1.3.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.2.2...1.3.0
 [1.2.2]: https://github.com/fulls1z3/ng2-metadata/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.2.0...1.2.1
