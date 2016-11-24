@@ -19,13 +19,15 @@
     "./src/models/metadata-settings.ts",
     "./src/metadata.service.ts"
   ],
-  "compileOnSave": false,
   "exclude": [
     "node_modules",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "**/*.e2e.ts"
   ],
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
     "skipTemplateCodegen": true
-  }
+  },
+  "compileOnSave": false,
+  "buildOnSave": false
 }

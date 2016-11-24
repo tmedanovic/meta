@@ -54,7 +54,7 @@ export class MetadataService {
             });
     }
 
-    setTitle(title: string, override = false) {
+    setTitle(title: string, override = false): void {
         const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
         if (!!this.metadataSettings) {
@@ -75,6 +75,8 @@ export class MetadataService {
                             ? (this.metadataSettings.pageTitleSeparator + this.metadataSettings.applicationName)
                             : '');
                     break;
+                default:
+                    throw new Error(`Error: Invalid pageTitlePositioning specified [${this.metadataSettings.pageTitlePositioning}]!`);
             }
         }
 
@@ -86,9 +88,9 @@ export class MetadataService {
         this.titleService.setTitle(title);
     }
 
-    setTag(tag: string, value: string) {
+    setTag(tag: string, value: string): void {
         if (tag === 'title') {
-            throw new Error(`Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
+            throw new Error(`Error: Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
                 + `Please use 'MetadataService.setTitle' instead.`);
         }
 
@@ -156,7 +158,7 @@ export class MetadataService {
         return el;
     }
 
-    private deleteMetaTags(name: string) {
+    private deleteMetaTags(name: string): void {
         let selector = `meta[name="${name}"]`;
 
         if (name.lastIndexOf('og:', 0) === 0) {
@@ -172,7 +174,7 @@ export class MetadataService {
         }
     }
 
-    private updateLocales(currentLocale: string, availableLocales: any) {
+    private updateLocales(currentLocale: string, availableLocales: any): void {
         if (!currentLocale) {
             currentLocale = this.metadataSettings
                 ? (this.metadataSettings.defaults ? this.metadataSettings.defaults['og:locale'] : '')
@@ -195,7 +197,7 @@ export class MetadataService {
         }
     }
 
-    private updateMetadata(metadata: any = {}, currentUrl: string) {
+    private updateMetadata(metadata: any = {}, currentUrl: string): void {
         if (metadata.disabled) {
             return;
         }

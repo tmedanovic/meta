@@ -10,10 +10,11 @@ You can install **`ng2-metadata`** using `npm`
 ```
 npm install ng2-metadata --save
 ```
-### Adding ng2-metadata to your project
+
+### Adding ng2-metadata to your project (SystemJS)
 Add `map` for **`ng2-metadata`** in your `systemjs.config`
 ```javascript
-'ng2-metadata': 'node_modules/ng2-metadata/dist/bundles/ng2-metadata.umd.min.js'
+'ng2-metadata': 'node_modules/ng2-metadata/bundles/ng2-metadata.umd.min.js'
 ```
 
 ### Route configuration

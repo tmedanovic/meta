@@ -3,7 +3,7 @@
 // Include dependencies
 var gulp = require('gulp'),
     $ = require('gulp-load-plugins')({
-        pattern : [
+        pattern: [
             'gulp-*',
             'rimraf',
             'webpack',
@@ -13,28 +13,28 @@ var gulp = require('gulp'),
 
 // Clean file(s)
 var clean = {
-    'temp' : function(done) {
+    'temp': function(done) {
         $.rimraf('./temp', done);
     },
-    'bundles' : function(done) {
+    'bundles': function(done) {
         $.rimraf('./bundles', done);
     },
-    'index.js': function (done) {
+    'index.js': function(done) {
         $.rimraf('./index.js', done);
     },
-    'index.d.ts': function (done) {
+    'index.d.ts': function(done) {
         $.rimraf('./index.d.ts', done);
     },
-    'index.metadata.json': function (done) {
+    'index.metadata.json': function(done) {
         $.rimraf('./index.metadata.json', done);
     },
-    'src/*.js': function (done) {
+    'src/*.js': function(done) {
         $.rimraf('./src/**/*.js', done);
     },
-    'src/*.d.ts': function (done) {
+    'src/*.d.ts': function(done) {
         $.rimraf('./src/**/*.d.ts', done);
     },
-    'src/*.metadata.json': function (done) {
+    'src/*.metadata.json': function(done) {
         $.rimraf('./src/**/*.metadata.json', done);
     }
 };
@@ -75,9 +75,9 @@ var compile = function (done) {
     };
 
     return gulp.src('./tsconfig.json')
-      .pipe($.exec('ngc -p "./tsconfig.json"', options))
-      .pipe($.exec.reporter(reportOptions))
-      .on('end', done);
+        .pipe($.exec('ngc -p "./tsconfig.json"', options))
+        .pipe($.exec.reporter(reportOptions))
+        .on('end', done);
 }
 
 compile.displayName = 'compile:ngc';
@@ -87,9 +87,9 @@ var bundle = function (done) {
     const conf = require('./webpack.config.js');
 
     return gulp.src('./index.ts')
-                .pipe($.webpackStream(conf, $.webpack))
-                .pipe(gulp.dest('./bundles'))
-                .on('end', done);
+        .pipe($.webpackStream(conf, $.webpack))
+        .pipe(gulp.dest('./bundles'))
+        .on('end', done);
 }
 
 bundle.displayName = 'bundle:webpack';
@@ -100,4 +100,23 @@ gulp.task('make',
         '__CLEAN__',
         compile,
         bundle
+    ));
+
+var tslint = function (done) {
+    return gulp.src([
+            './index.ts',
+            './src/**/*.ts',
+            '!./src/**/*.d.ts'
+    ])
+        .pipe($.tslint({ formatter: 'verbose' }))
+        .pipe($.tslint.report({ emitError: false }))
+        .on('end', done);
+}
+
+tslint.displayName = 'tslint';
+
+//*** make
+gulp.task('review:ts',
+    gulp.series(
+        tslint
     ));

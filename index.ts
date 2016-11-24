@@ -6,7 +6,7 @@ export * from './src/models/page-title-positioning';
 export * from './src/models/metadata-settings';
 export * from './src/metadata.service';
 
-export function metadataLoaderFactory() {
+export function metadataLoaderFactory(): MetadataLoader {
     return new MetadataStaticLoader();
 }
 
