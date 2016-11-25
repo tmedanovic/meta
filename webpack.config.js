@@ -1,45 +1,140 @@
-﻿const helpers = require('./config/helpers'),
-    webpack = require('webpack');
+﻿const helpers = require('./config/helpers');
 
+/*
+ * Webpack Plugins
+ */
+const forkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin,
+      contextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin'),
+      loaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin'),
+      uglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
+/*
+ * Webpack configuration
+ *
+ * See: http://webpack.github.io/docs/configuration.html#cli
+ */
 module.exports = {
-    resolve : {
-        extensions : ['.ts', '.js']
-    },
+    /*
+     * Cache generated modules and chunks to improve performance for multiple incremental builds.
+     * This is enabled by default in watch mode.
+     * You can pass false to disable it.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#cache
+     */
+    //cache: false,
 
+    /*
+     * The entry point for the bundle
+     * Our Angular.js app
+     *
+     * See: http://webpack.github.io/docs/configuration.html#entry
+     */
     entry: helpers.root('index.ts'),
 
-    output : {
-        path : helpers.root('bundles'),
-        publicPath : '/',
-        filename : 'ng2-metadata.umd.min.js',
-        libraryTarget : 'umd',
-        library : 'ng2-metadata'
+    /*
+     * Options affecting the resolving of modules.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#resolve
+     */
+    resolve: {
+        extensions: ['.ts', '.js']
     },
 
-    // require those dependencies but don't bundle them
-    externals : [/^\@angular\//, /^rxjs\//],
+    /*
+     * Options affecting the output of the compilation.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#output
+     */
+    output: {
+        /*
+         * The output directory as absolute path (required).
+         *
+         * See: http://webpack.github.io/docs/configuration.html#output-path
+         */
+        path: helpers.root('bundles'),
+        publicPath: '/',
 
-    module : {
-        rules: [{
-            enforce: 'pre',
-            test: /\.ts$/,
-            loader: 'tslint-loader',
-            exclude: [helpers.root('node_modules')]
-        }, {
-            test: /\.ts$/,
-            loader: 'awesome-typescript-loader?declaration=false',
-            exclude: [/\.(spec|e2e)\.ts$/]
-        }]
+        /*
+         * Specifies the name of each output file on disk.
+         * IMPORTANT: You must not specify an absolute path here!
+         *
+         * See: http://webpack.github.io/docs/configuration.html#output-filename
+         */
+        filename: 'ng2-metadata.umd.min.js',
+
+        libraryTarget: 'umd',
+        library: 'ng2-metadata'
     },
 
-    plugins : [
-        // fix the warning in ./~/@angular/core/src/linker/system_js_ng_module_factory_loader.js
-        new webpack.ContextReplacementPlugin(
+    /*
+     * Require those dependencies but don't bundle them
+     */
+    externals: [/^\@angular\//, /^rxjs\//],
+
+    /*
+     * Options affecting the normal modules.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#module
+     */
+    module: {
+        rules: [
+            /*
+             * TS linter
+             */
+            {
+                enforce: 'pre',
+                test: /\.ts$/,
+                loader: 'tslint-loader',
+                exclude: [helpers.root('node_modules')]
+            },
+
+            /*
+             * Typescript loader support for .ts and Angular 2 async routes via .async.ts
+             * Replace templateUrl and stylesUrl with require()
+             *
+             * See: https://github.com/s-panferov/awesome-typescript-loader
+             */
+            {
+                test: /\.ts$/,
+                loader: 'awesome-typescript-loader?declaration=false',
+                exclude: [/\.(spec|e2e)\.ts$/]
+            }
+        ]
+    },
+
+    /*
+     * Add additional plugins to the compiler.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#plugins
+     */
+    plugins: [
+        /*
+         * Plugin: ForkCheckerPlugin
+         * Description: Do type checking in a separate process, so webpack don't need to wait.
+         *
+         * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
+         */
+        new forkCheckerPlugin(),
+
+        /*
+         * Plugin: ContextReplacementPlugin
+         * Description: Provides context to Angular's use of System.import
+         *
+         * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
+         * See: https://github.com/angular/angular/issues/11580
+         */
+        new contextReplacementPlugin(
+            // fix the warning in ./~/@angular/core/src/linker/system_js_ng_module_factory_loader.js
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             helpers.root('./src')
         ),
 
-        new webpack.LoaderOptionsPlugin({
+        /*
+         * Plugin LoaderOptionsPlugin (experimental)
+         *
+         * See: https://gist.github.com/sokra/27b24881210b56bbaff7
+         */
+        new loaderOptionsPlugin({
             options: {
                 tslint: {
                     emitErrors: false,
@@ -48,9 +143,33 @@ module.exports = {
             }
         }),
 
-        new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
-            mangle : {
-                keep_fnames : true
+        /*
+         * Plugin: UglifyJsPlugin
+         * Description: Minimize all JavaScript output of chunks.
+         * Loaders are switched into minimizing mode.
+         *
+         * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+         */
+        new uglifyJsPlugin({
+            beautify: false,
+            output: {
+                comments: false
+            },
+            mangle: {
+                screw_ie8: true
+            },
+            compress: {
+                screw_ie8: true,
+                warnings: false,
+                conditionals: true,
+                unused: true,
+                comparisons: true,
+                sequences: true,
+                dead_code: true,
+                evaluate: true,
+                if_return: true,
+                join_vars: true,
+                negate_iife: false // we need this for lazy v8
             }
         })
     ]
