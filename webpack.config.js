@@ -84,7 +84,7 @@ module.exports = {
             {
                 enforce: 'pre',
                 test: /\.ts$/,
-                loader: 'tslint-loader',
+                use: 'tslint-loader',
                 exclude: [helpers.root('node_modules')]
             },
 
@@ -96,7 +96,7 @@ module.exports = {
              */
             {
                 test: /\.ts$/,
-                loader: 'awesome-typescript-loader?declaration=false',
+                use: 'awesome-typescript-loader?declaration=false',
                 exclude: [/\.(spec|e2e)\.ts$/]
             }
         ]

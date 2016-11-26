@@ -1,4 +1,4 @@
-# ng2-metadata [![Build Status](https://travis-ci.org/fulls1z3/ng2-metadata.svg?branch=master)](https://travis-ci.org/fulls1z3/ng2-metadata) [![Dependency Status](https://david-dm.org/fulls1z3/ng2-metadata.svg)](https://david-dm.org/fulls1z3/ng2-metadata) [![npm version](https://badge.fury.io/js/ng2-metadata.svg)](http://badge.fury.io/js/ng2-metadata) [![npm downloads](https://img.shields.io/npm/dm/ng2-metadata.svg)](https://npmjs.org/ng2-metadata)
+# ng2-metadata [![Build Status](https://travis-ci.org/fulls1z3/ng2-metadata.svg?branch=master)](https://travis-ci.org/fulls1z3/ng2-metadata) [![devDependency Status](https://david-dm.org/fulls1z3/ng2-metadata/dev-status.svg)](https://david-dm.org/fulls1z3/ng2-metadata#info=devDependencies) [![peerDependency Status](https://david-dm.org/fulls1z3/ng2-metadata/peer-status.svg)](https://david-dm.org/fulls1z3/ng2-metadata#info=peerDependencies) [![npm version](https://badge.fury.io/js/ng2-metadata.svg)](http://badge.fury.io/js/ng2-metadata) [![npm downloads](https://img.shields.io/npm/dm/ng2-metadata.svg)](https://npmjs.org/ng2-metadata)
 This repository holds the TypeScript source code and distributable bundle of **`ng2-metadata`**, the dynamic page title &amp; meta tags generator for Angular2.
 
 ## Prerequisites
@@ -172,6 +172,6 @@ export class ItemComponent implements OnInit {
 ## Licence
 The MIT License (MIT)
 
-Copyright © 2016 [Burak Tasci](http://www.buraktasci.com)
+Copyright (c) 2016 [Burak Tasci](http://www.buraktasci.com)
 
 [AoT compilation]: https://angular.io/docs/ts/latest/cookbook/aot-compiler.html
