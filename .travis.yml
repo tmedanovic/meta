@@ -8,6 +8,8 @@ branches:
   only: master
 
 before_install:
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome*.deb
   - export CHROME_BIN=/usr/bin/google-chrome
   - npm prune
   - "npm i -g npm@^3"
