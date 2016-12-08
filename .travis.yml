@@ -8,6 +8,8 @@ branches:
   only: master
 
 before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get remove chromium-browser
   - export CHROME_BIN=/usr/bin/google-chrome
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
