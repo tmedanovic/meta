@@ -11,7 +11,6 @@ import 'rxjs/add/operator/filter';
 
 // module
 import { MetadataModule, MetadataLoader, MetadataStaticLoader, MetadataService, PageTitlePositioning, MetadataSettings } from '..';
-//import { t } from '../testing';
 
 let defaultSettings: MetadataSettings = {
     pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
@@ -465,9 +464,9 @@ describe('ng2-metadata:',
                         (metadata: MetadataService, doc: any) => {
                             // default og:locale:alternate
                             metadata.setTag('og:locale:alternate', '');
-                            
+
                             const elements = doc.querySelectorAll('meta[property="og:locale:alternate"]');
-                            
+
                             expect(elements.length).toEqual(2);
                             expect(elements[0].getAttribute('content')).toEqual('nl_NL');
                             expect(elements[1].getAttribute('content')).toEqual('tr_TR');
@@ -498,7 +497,7 @@ describe('ng2-metadata:',
                         (metadata: MetadataService) => {
                             const injector = getTestBed();
                             const doc = injector.get(DOCUMENT);
-                
+
                             metadata.setTag('og:locale:alternate', 'en_US');
                             expect(getAttribute(doc, 'og:locale:alternate', 'content')).toBeUndefined();
                         }));
@@ -508,21 +507,21 @@ describe('ng2-metadata:',
                         fakeAsync((title: Title, doc: any) => {
                             const settings = defaultSettings;
                             settings.defaults['og:locale:alternate'] = 'en_US';
-                
+
                             function createMetadataLoader(): MetadataStaticLoader {
                                 return new MetadataStaticLoader(settings);
                             }
-                
+
                             testModuleConfig({ provide: MetadataLoader, useFactory: (createMetadataLoader) });
-                
+
                             const injector = getTestBed();
                             const metadata = injector.get(MetadataService);
                             const router = injector.get(Router);
-                
+
                             expect(metadata).toBeDefined();
                             expect(metadata.loader).toBeDefined();
                             expect(metadata.loader instanceof MetadataStaticLoader).toBeTruthy();
-                
+
                             // initial navigation
                             router.navigate(['/'])
                                 .then(() => {
