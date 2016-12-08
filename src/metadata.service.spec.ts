@@ -34,8 +34,8 @@ let testSettings: MetadataSettings = {
         'publisher': 'a superhero',
         'og:image': 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg',
         'og:type': 'website',
-        'og:locale': 'en_US',
-        'og:locale:alternate': 'nl_NL,tr_TR'
+        'og:locale': 'en-US',
+        'og:locale:alternate': 'nl-NL,tr-TR'
     }
 };
 
@@ -60,8 +60,8 @@ const testRoutes = [
                         title: 'Toothpaste',
                         override: true, // prevents appending/prepending the application name to the title attribute
                         description: 'Eating toothpaste is considered to be too healthy!',
-                        'og:locale' : 'fr_FR',
-                        'og:locale:alternate' : 'en_US,tr_TR'
+                        'og:locale' : 'fr-FR',
+                        'og:locale:alternate' : 'en-US,tr-TR'
                     }
                 }
             },
@@ -85,7 +85,7 @@ const testRoutes = [
 ];
 
 // test module configuration for each test
-const testModuleConfig = (options?: any) => {
+const testModuleConfig = (moduleOptions?: any) => {
     // reset the test environment before initializing it.
     TestBed.resetTestEnvironment();
 
@@ -93,7 +93,7 @@ const testModuleConfig = (options?: any) => {
         .configureTestingModule({
             imports: [
                 RouterTestingModule.withRoutes(testRoutes),
-                MetadataModule.forRoot(options)
+                MetadataModule.forRoot(moduleOptions)
             ]
         });
 };
@@ -442,7 +442,7 @@ describe('ng2-metadata:',
                             expect(getAttribute(doc, 'og:locale', 'content')).toEqual('en_US');
 
                             // given og:locale
-                            metadata.setTag('og:locale', 'tr_TR');
+                            metadata.setTag('og:locale', 'tr-TR');
                             expect(getAttribute(doc, 'og:locale', 'content')).toEqual('tr_TR');
                         }));
 
@@ -472,7 +472,7 @@ describe('ng2-metadata:',
                             expect(elements[1].getAttribute('content')).toEqual('tr_TR');
 
                             // given og:locale:alternate
-                            metadata.setTag('og:locale:alternate', 'tr_TR');
+                            metadata.setTag('og:locale:alternate', 'tr-TR');
                             expect(getAttribute(doc, 'og:locale:alternate', 'content')).toEqual('tr_TR');
                         }));
 
@@ -498,7 +498,7 @@ describe('ng2-metadata:',
                             const injector = getTestBed();
                             const doc = injector.get(DOCUMENT);
 
-                            metadata.setTag('og:locale:alternate', 'en_US');
+                            metadata.setTag('og:locale:alternate', 'en-US');
                             expect(getAttribute(doc, 'og:locale:alternate', 'content')).toBeUndefined();
                         }));
 
@@ -506,7 +506,7 @@ describe('ng2-metadata:',
                     inject([Title, DOCUMENT],
                         fakeAsync((title: Title, doc: any) => {
                             const settings = defaultSettings;
-                            settings.defaults['og:locale:alternate'] = 'en_US';
+                            settings.defaults['og:locale:alternate'] = 'en-US';
 
                             function createMetadataLoader(): MetadataStaticLoader {
                                 return new MetadataStaticLoader(settings);

@@ -99,7 +99,7 @@ export class MetadataService {
 
         const tagElement = this.getOrCreateMetaTag(tag);
 
-        tagElement.setAttribute('content', value);
+        tagElement.setAttribute('content', tag === 'og:locale' ? value.replace(/-/g, '_') : value);
         this.isMetadataSet[tag] = true;
 
         if (tag === 'description') {
