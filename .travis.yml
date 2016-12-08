@@ -11,7 +11,7 @@ before_install:
 #  - sudo apt-get install -y libappindicator1 fonts-liberation
 #  - sudo add-apt-repository universe
 #  - sudo apt-get update
-  - sudo apt-get install libfontconfig1=2.11.0-6.7 libstdc++6=6.2.1-5 fonts-liberation libappindicator1 lsb-base
+  - sudo apt-get install libfontconfig1=2.9.0-7.1 libstdc++6=4.7.2-5 fonts-liberation libappindicator1 lsb-base
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome*.deb
   - sudo apt-get install -f
