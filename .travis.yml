@@ -9,7 +9,9 @@ branches:
 
 before_install:
 #  - sudo apt-get install -y libappindicator1 fonts-liberation
-  - sudo apt-get install -f
+  - sudo add-apt-repository universe
+  - sudo apt-get update
+  - sudo apt-get install libfontconfig1 libstdc++6 fonts-liberation libappindicator1 lsb-base
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome*.deb
   - sudo apt-get install -f
