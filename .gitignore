@@ -2,15 +2,17 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/bundles
-/node_modules
-/obj/Debug
-ng2-metadata.csproj
-ng2-metadata.csproj.user
-publishing.txt
 *.js
-!helpers.js
-!gulpfile.js
-!webpack.config.js
 *.d.ts
 *.metadata.json
+/bundles
+!/config/*.js
+/coverage
+/node_modules
+/obj/Debug
+!gulpfile.js
+!karma.conf.js
+ng2-metadata.csproj
+ng2-metadata.csproj.user
+npm-debug.log
+publishing.txt

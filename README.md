@@ -1,5 +1,6 @@
-# ng2-metadata
-[![Build Status](https://travis-ci.org/fulls1z3/ng2-metadata.svg?branch=master)](https://travis-ci.org/fulls1z3/ng2-metadata) [![devDependency Status](https://david-dm.org/fulls1z3/ng2-metadata/dev-status.svg)](https://david-dm.org/fulls1z3/ng2-metadata#info=devDependencies) [![peerDependency Status](https://david-dm.org/fulls1z3/ng2-metadata/peer-status.svg)](https://david-dm.org/fulls1z3/ng2-metadata#info=peerDependencies) [![npm version](https://badge.fury.io/js/ng2-metadata.svg)](http://badge.fury.io/js/ng2-metadata) [![npm downloads](https://img.shields.io/npm/dm/ng2-metadata.svg)](https://npmjs.org/ng2-metadata)
+# ng2-metadata [![npm version](https://badge.fury.io/js/ng2-metadata.svg)](http://badge.fury.io/js/ng2-metadata) [![npm downloads](https://img.shields.io/npm/dm/ng2-metadata.svg)](https://npmjs.org/ng2-metadata)
+
+[![Linux build](https://travis-ci.org/fulls1z3/ng2-metadata.svg?branch=master)](https://travis-ci.org/fulls1z3/ng2-metadata) [![Windows build](https://ci.appveyor.com/api/projects/status/github/fulls1z3/ng2-metadata?branch=master&svg=true)](https://ci.appveyor.com/project/fulls1z3/ng2-metadata) [![coverage](https://codecov.io/github/fulls1z3/ng2-metadata/coverage.svg?branch=master)](https://codecov.io/gh/fulls1z3/ng2-metadata) [![peerDependency Status](https://david-dm.org/fulls1z3/ng2-metadata/peer-status.svg)](https://david-dm.org/fulls1z3/ng2-metadata#info=peerDependencies) [![devDependency Status](https://david-dm.org/fulls1z3/ng2-metadata/dev-status.svg)](https://david-dm.org/fulls1z3/ng2-metadata#info=devDependencies)
 
 This repository holds the TypeScript source code and distributable bundle of **`ng2-metadata`**, the dynamic page title &amp; meta tags generator for Angular2.
 
@@ -27,33 +28,33 @@ Add metadata inside the `data` property of routes.
 ```TypeScript
 export const routes = [
   {
-    path : 'home',
-    component : HomeComponent,
-    data : {
-      metadata : {
-        title : 'Sweet home',
-        description : 'Home, home sweet home... and what?',
+    path: 'home',
+    component: HomeComponent,
+    data: {
+      metadata: {
+        title: 'Sweet home',
+        description: 'Home, home sweet home... and what?'
       }
     }
   },
   {
-    path : 'duck',
-    component : DuckComponent,
-    data : {
-      metadata : {
-        title : 'Rubber duckie',
-        description : 'Have you seen my rubber duckie?',
+    path: 'duck',
+    component: DuckComponent,
+    data: {
+      metadata: {
+        title: 'Rubber duckie',
+        description: 'Have you seen my rubber duckie?'
       }
     }
   },
   {
-    path : 'toothpaste',
-    component : ToothpasteComponent,
-    data : {
-      metadata : {
-        title : 'Toothpaste',
-        override : true, // prevents appending/prepending the application name to the title attribute
-        description : 'Eating toothpaste is considered to be too healthy!',
+    path: 'toothpaste',
+    component: ToothpasteComponent,
+    data: {
+      metadata: {
+        title: 'Toothpaste',
+        override: true, // prevents appending/prepending the application name to the title attribute
+        description: 'Eating toothpaste is considered to be too healthy!'
       }
     }
   }
@@ -115,16 +116,16 @@ import { MetadataLoader, MetadataStaticLoader, PageTitlePositioning, MetadataSer
 
 export function createMetadataLoader() {
   return new MetadataStaticLoader({
-    pageTitlePositioning : PageTitlePositioning.PrependPageTitle,
-    pageTitleSeparator : ' - ',
-    applicationName : 'Tour of (lazy/busy) heroes',
-    defaults : {
-      title : 'Mighty mighty mouse',
-      description : 'Mighty Mouse is an animated superhero mouse character',
-      'og:image' : 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg'
-      'og:type' : 'website',
-      'og:locale' : 'en_US',
-      'og:locale:alternate' : 'nl_NL,tr_TR'
+    pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
+    pageTitleSeparator: ' - ',
+    applicationName: 'Tour of (lazy/busy) heroes',
+    defaults: {
+      title: 'Mighty mighty mouse',
+      description: 'Mighty Mouse is an animated superhero mouse character',
+      'og:image': 'https://upload.wikimedia.org/wikipedia/commons/f/f8/superraton.jpg',
+      'og:type': 'website',
+      'og:locale': 'en_US',
+      'og:locale:alternate': 'nl_NL,tr_TR'
     }
   });
 }

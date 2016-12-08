@@ -1,20 +1,20 @@
-﻿const helpers = require('./config/helpers');
-
-/*
- * Webpack Plugins
+﻿/**
+ * Webpack helpers & dependencies
  */
+const helpers = require('./helpers');
+
 const forkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin,
       contextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin'),
       loaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin'),
       uglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
-/*
+/**
  * Webpack configuration
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = {
-    /*
+    /**
      * Cache generated modules and chunks to improve performance for multiple incremental builds.
      * This is enabled by default in watch mode.
      * You can pass false to disable it.
@@ -23,7 +23,7 @@ module.exports = {
      */
     //cache: false,
 
-    /*
+    /**
      * The entry point for the bundle
      * Our Angular.js app
      *
@@ -31,7 +31,7 @@ module.exports = {
      */
     entry: helpers.root('index.ts'),
 
-    /*
+    /**
      * Options affecting the resolving of modules.
      *
      * See: http://webpack.github.io/docs/configuration.html#resolve
@@ -40,13 +40,13 @@ module.exports = {
         extensions: ['.ts', '.js']
     },
 
-    /*
+    /**
      * Options affecting the output of the compilation.
      *
      * See: http://webpack.github.io/docs/configuration.html#output
      */
     output: {
-        /*
+        /**
          * The output directory as absolute path (required).
          *
          * See: http://webpack.github.io/docs/configuration.html#output-path
@@ -54,7 +54,7 @@ module.exports = {
         path: helpers.root('bundles'),
         publicPath: '/',
 
-        /*
+        /**
          * Specifies the name of each output file on disk.
          * IMPORTANT: You must not specify an absolute path here!
          *
@@ -66,19 +66,19 @@ module.exports = {
         library: 'ng2-metadata'
     },
 
-    /*
+    /**
      * Require those dependencies but don't bundle them
      */
     externals: [/^\@angular\//, /^rxjs\//],
 
-    /*
+    /**
      * Options affecting the normal modules.
      *
      * See: http://webpack.github.io/docs/configuration.html#module
      */
     module: {
         rules: [
-            /*
+            /**
              * TS linter
              */
             {
@@ -88,7 +88,7 @@ module.exports = {
                 exclude: [helpers.root('node_modules')]
             },
 
-            /*
+            /**
              * Typescript loader support for .ts and Angular 2 async routes via .async.ts
              * Replace templateUrl and stylesUrl with require()
              *
@@ -102,13 +102,13 @@ module.exports = {
         ]
     },
 
-    /*
+    /**
      * Add additional plugins to the compiler.
      *
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-        /*
+        /**
          * Plugin: ForkCheckerPlugin
          * Description: Do type checking in a separate process, so webpack don't need to wait.
          *
@@ -116,7 +116,7 @@ module.exports = {
          */
         new forkCheckerPlugin(),
 
-        /*
+        /**
          * Plugin: ContextReplacementPlugin
          * Description: Provides context to Angular's use of System.import
          *
@@ -126,10 +126,10 @@ module.exports = {
         new contextReplacementPlugin(
             // fix the warning in ./~/@angular/core/src/linker/system_js_ng_module_factory_loader.js
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-            helpers.root('./src')
+            helpers.root('src')
         ),
 
-        /*
+        /**
          * Plugin LoaderOptionsPlugin (experimental)
          *
          * See: https://gist.github.com/sokra/27b24881210b56bbaff7
@@ -143,7 +143,7 @@ module.exports = {
             }
         }),
 
-        /*
+        /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.
          * Loaders are switched into minimizing mode.
@@ -172,5 +172,20 @@ module.exports = {
                 negate_iife: false // we need this for lazy v8
             }
         })
-    ]
+    ],
+
+    /**
+     * Include polyfills or mocks for various node stuff
+     * Description: Node configuration
+     *
+     * See: https://webpack.github.io/docs/configuration.html#node
+     */
+    node: {
+        global: true,
+        crypto: 'empty',
+        process: false,
+        module: false,
+        clearImmediate: false,
+        setImmediate: false
+    }
 };

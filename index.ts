@@ -1,5 +1,7 @@
+// angular
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
+// module
 import { MetadataLoader, MetadataStaticLoader, MetadataService } from './src/metadata.service';
 
 export * from './src/models/page-title-positioning';
@@ -17,8 +19,8 @@ export class MetadataModule {
                        useFactory: (metadataLoaderFactory)
                    }): ModuleWithProviders {
         return {
-            ngModule : MetadataModule,
-            providers : [
+            ngModule: MetadataModule,
+            providers: [
                 providedLoader,
                 MetadataService
             ]

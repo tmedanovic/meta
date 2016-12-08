@@ -1,3 +1,4 @@
+// module
 import { PageTitlePositioning } from './page-title-positioning';
 
 export interface MetadataSettings {

@@ -1,17 +1,20 @@
 ﻿#dev stuff
+*.ts
+!*.d.ts
 /.github
 /config
+/coverage
 /node_modules
 /obj/Debug
 .gitignore
 .npmignore
 .travis.yml
+appveyor.yml
 gulpfile.js
+karma.conf.js
 ng2-metadata.csproj
 ng2-metadata.csproj.user
+npm-debug.log
 publishing.txt
 tsconfig.json
 tslint.json
-webpack.config.js
-*.ts
-!*.d.ts
