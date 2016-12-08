@@ -8,9 +8,7 @@ branches:
   only: master
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install google-chrome-stable
-  - export CHROME_BIN=chromium-browser
+  - export CHROME_BIN=/usr/bin/google-chrome
   - npm prune
   - "npm i -g npm@^3"
 before_script:
