@@ -11,7 +11,7 @@ before_install:
   - npm prune
   - export CHROME_BIN=/usr/bin/google-chrome
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo dpkg -i google-chrome*.deb
+  - sudo dpkg -i google-chrome-stable_current_amd64.deb
   - "npm i -g npm@^3"
 before_script:
   - export DISPLAY=:99.0
