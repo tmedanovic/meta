@@ -1,4 +1,12 @@
-sudo: true
+sudo: required
+dist: trusty
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+
 language: node_js
 node_js:
   - "6"
@@ -7,39 +15,16 @@ cache:
 branches:
   only: master
 
-before_install:
-#  - sudo apt-get install -y libappindicator1 fonts-liberation
-#  - sudo add-apt-repository universe
-#  - sudo apt-get update
-#  - sudo apt-get install libfontconfig1=2.9.0-7.1ubuntu1 libstdc++6=4.7.2-5 fonts-liberation libappindicator1 lsb-base
-  - wget https://launchpad.net/~dreamstudio/+archive/ubuntu/graphics/+build/4726570/+files/fontconfig-config_2.9.0-7.1ubuntu1_all.deb
-  - wget https://launchpad.net/~dreamstudio/+archive/ubuntu/graphics/+build/4726569/+files/libfontconfig1_2.9.0-7.1ubuntu1_amd64.deb
-  - wget https://launchpad.net/~dreamstudio/+archive/ubuntu/graphics/+build/4726569/+files/fontconfig_2.9.0-7.1ubuntu1_amd64.deb
-  - wget http://launchpadlibrarian.net/156644402/gcc-4.8-base_4.8.1-10ubuntu9_amd64.deb
-  - wget http://launchpadlibrarian.net/153554145/libc6_2.17-93ubuntu4_amd64.deb
-  - wget http://launchpadlibrarian.net/156644403/libgcc1_4.8.1-10ubuntu9_amd64.deb
-  - wget http://launchpadlibrarian.net/139041911/libstdc++6_4.8.0-4ubuntu4_amd64.deb
-  - sudo dpkg -i fontconfig-config_2.9.0-7.1ubuntu1_all.deb
-  - sudo dpkg -i libfontconfig1_2.9.0-7.1ubuntu1_amd64.deb
-  - sudo dpkg -i fontconfig_2.9.0-7.1ubuntu1_amd64.deb
-  - sudo dpkg -i gcc-4.8-base_4.8.1-10ubuntu9_amd64.deb
-  - sudo dpkg -i libc6_2.17-93ubuntu4_amd64.deb
-  - sudo dpkg -i libgcc1_4.8.1-10ubuntu9_amd64.deb
-  - sudo dpkg -i libstdc++6_4.8.0-4ubuntu4_amd64.deb
-  - sudo apt-get install fonts-liberation libappindicator1 lsb-base
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo dpkg -i google-chrome*.deb
-  - sudo apt-get install -f
-#  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
-#  - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-#  - sudo apt-get update 
-#  - sudo apt-get install google-chrome-stable
+# before_install:
+#   - npm prune
+#   - export CHROME_BIN=chromium-browser
+#   - "npm i -g npm@^3"
 before_script:
-  - export CHROME_BIN=/usr/bin/google-chrome
+  # - export CHROME_BIN=/usr/bin/google-chrome
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm i -g npm@^3
-  - npm prune
+  - sleep 3
 after_failure:
   - cat /home/travis/build/fulls1z3/ng2-metadata/npm-debug.log
 after_success:
