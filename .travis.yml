@@ -15,14 +15,14 @@ before_install:
   - wget https://launchpad.net/~dreamstudio/+archive/ubuntu/graphics/+build/4726570/+files/fontconfig-config_2.9.0-7.1ubuntu1_all.deb
   - wget https://launchpad.net/~dreamstudio/+archive/ubuntu/graphics/+build/4726569/+files/libfontconfig1_2.9.0-7.1ubuntu1_amd64.deb
   - wget https://launchpad.net/~dreamstudio/+archive/ubuntu/graphics/+build/4726569/+files/fontconfig_2.9.0-7.1ubuntu1_amd64.deb
-  - wget http://launchpadlibrarian.net/139041839/gcc-4.8-base_4.8.0-4ubuntu4_amd64.deb
+  - wget http://launchpadlibrarian.net/156644402/gcc-4.8-base_4.8.1-10ubuntu9_amd64.deb
   - wget http://launchpadlibrarian.net/153554145/libc6_2.17-93ubuntu4_amd64.deb
   - wget http://launchpadlibrarian.net/156644403/libgcc1_4.8.1-10ubuntu9_amd64.deb
   - wget http://launchpadlibrarian.net/139041911/libstdc++6_4.8.0-4ubuntu4_amd64.deb
   - sudo dpkg -i fontconfig-config_2.9.0-7.1ubuntu1_all.deb
   - sudo dpkg -i libfontconfig1_2.9.0-7.1ubuntu1_amd64.deb
   - sudo dpkg -i fontconfig_2.9.0-7.1ubuntu1_amd64.deb
-  - sudo dpkg -i gcc-4.8-base_4.8.0-4ubuntu4_amd64.deb
+  - sudo dpkg -i gcc-4.8-base_4.8.1-10ubuntu9_amd64.deb
   - sudo dpkg -i libc6_2.17-93ubuntu4_amd64.deb
   - sudo dpkg -i libgcc1_4.8.1-10ubuntu9_amd64.deb
   - sudo dpkg -i libstdc++6_4.8.0-4ubuntu4_amd64.deb
