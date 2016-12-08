@@ -111,7 +111,7 @@ You can customize this behavior (and ofc other settings) by configuring a custom
 
 ```TypeScript
 ...
-import { MetadataLoader, MetadataStaticLoader, PageTitlePositioning, MetadataService } from 'ng2-metadata';
+import { MetadataModule, MetadataLoader, MetadataStaticLoader } from 'ng2-metadata';
 ...
 
 export function createMetadataLoader() {
