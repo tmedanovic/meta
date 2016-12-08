@@ -49,7 +49,7 @@ export class MetadataService {
 
                     if (!!route.snapshot.routeConfig.data) {
                         const metadata = route.snapshot.routeConfig.data['metadata'];
-                    
+
                         if (!!metadata)
                             this.updateMetadata(metadata, routeData.url);
                     }
