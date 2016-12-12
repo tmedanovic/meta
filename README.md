@@ -111,10 +111,10 @@ You can customize this behavior (and ofc other settings) by configuring a custom
 
 ```TypeScript
 ...
-import { MetadataModule, MetadataLoader, MetadataStaticLoader } from 'ng2-metadata';
+import { MetadataModule, MetadataLoader, MetadataStaticLoader, PageTitlePositioning } from 'ng2-metadata';
 ...
 
-export function createMetadataLoader() {
+export function metadataFactory() {
   return new MetadataStaticLoader({
     pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
     pageTitleSeparator: ' - ',
@@ -142,7 +142,7 @@ export function createMetadataLoader() {
     RouterModule.forRoot(routes),
     MetadataModule.forRoot({
       provide: MetadataLoader,
-      useFactory: (createMetadataLoader)
+      useFactory: (metadataFactory)
     })
   ],
   bootstrap: [AppComponent]

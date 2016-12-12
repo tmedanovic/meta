@@ -159,7 +159,10 @@ export class MetadataService {
         html.setAttribute('lang', currentLocale);
 
         const selector = `meta[property="og:locale:alternate"]`;
-        const elements = this.document.querySelectorAll(selector);
+        let elements = this.document.querySelectorAll(selector);
+
+        // fixes "TypeError: Object doesn't support property or method 'forEach'" issue on IE11
+        elements = Array.prototype.slice.call(elements);
 
         elements.forEach((el: any) => {
             this.document.head.removeChild(el);

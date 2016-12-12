@@ -1,6 +1,6 @@
 {
   "name": "ng2-metadata",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Dynamic page title & meta tags generator for Angular2",
   "scripts": {
     "test": "karma start"
