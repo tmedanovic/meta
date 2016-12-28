@@ -1,7 +1,7 @@
 // angular
 import { Title, DOCUMENT } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
-import { Injector } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { fakeAsync, getTestBed, inject, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -39,12 +39,16 @@ let testSettings: MetadataSettings = {
     }
 };
 
+@Component({ template: '<router-outlet></router-outlet>' })
+export class TestComponent {}
+
 const testRoutes = [
     {
         path: '',
         children: [
             {
                 path: 'duck',
+                component: TestComponent,
                 data: {
                     metadata: {
                         disabled: true,
@@ -55,6 +59,7 @@ const testRoutes = [
             },
             {
                 path: 'toothpaste',
+                component: TestComponent,
                 data: {
                     metadata: {
                         title: 'Toothpaste',
@@ -66,10 +71,12 @@ const testRoutes = [
                 }
             },
             {
-                path: 'no-data'
+                path: 'no-data',
+                component: TestComponent
             },
             {
                 path: 'no-metadata',
+                component: TestComponent,
                 data: {
                     dummy: 'yummy'
                 }
@@ -94,6 +101,9 @@ const testModuleConfig = (moduleOptions?: any) => {
             imports: [
                 RouterTestingModule.withRoutes(testRoutes),
                 MetadataModule.forRoot(moduleOptions)
+            ],
+            declarations: [
+                TestComponent
             ]
         });
 };
@@ -198,6 +208,8 @@ describe('ng2-metadata:',
                             expect(metadata.loader).toBeDefined();
                             expect(metadata.loader instanceof MetadataStaticLoader).toBeTruthy();
 
+                            TestBed.createComponent(TestComponent);
+
                             // initial navigation
                             router.navigate(['/'])
                                 .then(() => {
@@ -261,6 +273,8 @@ describe('ng2-metadata:',
                             expect(metadata).toBeDefined();
                             expect(metadata.loader).toBeDefined();
                             expect(metadata.loader instanceof MetadataStaticLoader).toBeTruthy();
+
+                            TestBed.createComponent(TestComponent);
 
                             // initial navigation
                             router.navigate(['/'])
@@ -521,6 +535,8 @@ describe('ng2-metadata:',
                             expect(metadata).toBeDefined();
                             expect(metadata.loader).toBeDefined();
                             expect(metadata.loader instanceof MetadataStaticLoader).toBeTruthy();
+
+                            TestBed.createComponent(TestComponent);
 
                             // initial navigation
                             router.navigate(['/'])
