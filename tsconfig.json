@@ -8,19 +8,21 @@
     "removeComments": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
+    "lib": [ "es2015", "dom" ],
     "declaration": true,
     "typeRoots": [
-      "./node_modules/@types/"
+      "node_modules/@types"
     ]
   },
   "files": [
     "index.ts",
-    "./src/models/page-title-positioning",
-    "./src/models/metadata-settings.ts",
-    "./src/metadata.service.ts"
+    "src/models/page-title-positioning.ts",
+    "src/models/metadata-settings.ts",
+    "src/metadata.service.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.spec.ts"
   ],
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
