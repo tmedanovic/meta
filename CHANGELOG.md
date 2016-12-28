@@ -1,6 +1,11 @@
 ﻿# Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.4.2] - 2016-12-29
+### Changed
+- Updated dependencies
+- Updated tests
+
 ## [1.4.1] - 2016-12-12
 ### Changed
 - Updated README.md
@@ -120,6 +125,7 @@ All notable changes to this project will be documented in this file.
 ## 1.0.0 - 2016-11-10
 - pre-release
 
+[1.4.2]: https://github.com/fulls1z3/ng2-metadata/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/fulls1z3/ng2-metadata/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/fulls1z3/ng2-metadata/compare/1.3.5...1.4.0
 [1.3.5]: https://github.com/fulls1z3/ng2-metadata/compare/1.3.4...1.3.5
