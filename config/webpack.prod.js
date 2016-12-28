@@ -3,8 +3,7 @@
  */
 const helpers = require('./helpers');
 
-const forkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin,
-      contextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin'),
+const contextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin'),
       loaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin'),
       uglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
@@ -108,14 +107,6 @@ module.exports = {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-        /**
-         * Plugin: ForkCheckerPlugin
-         * Description: Do type checking in a separate process, so webpack don't need to wait.
-         *
-         * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
-         */
-        new forkCheckerPlugin(),
-
         /**
          * Plugin: ContextReplacementPlugin
          * Description: Provides context to Angular's use of System.import

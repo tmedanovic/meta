@@ -8,8 +8,7 @@ var gulp = require('gulp'),
         pattern: [
             'gulp-*',
             'rimraf',
-            'webpack',
-            'webpack-stream'
+            'webpack'
         ]
     }),
     $$ = require('./helpers');;
@@ -133,13 +132,46 @@ tslint.displayName = 'tslint';
  * Bundle
  */
 var bundle = {
-    webpack: function (done) {
-        const conf = require('./webpack.prod.js');
+    webpack: function(done) {
+        const chalk = require('chalk'),
+              conf = require('./webpack.prod.js');
 
-        return gulp.src('./index.ts')
-            .pipe($.webpackStream(conf, $.webpack))
-            .pipe(gulp.dest('./bundles'))
-            .on('end', done);
+        $.webpack(conf)
+            .run(function(err, stats) {
+                if (err) {
+                    console.log(chalk.red(`Error: ${err}`));
+                    done();
+                } else {
+                    const statsJson = stats.toJson(),
+                          warnings = statsJson.warnings,
+                          errors = statsJson.errors;
+
+                    Object.keys(warnings)
+                        .forEach(function(key) {
+                            console.log(chalk.gray(`Warning: ${warnings[key]}\n`));
+                        });
+
+                    if (warnings.length > 0)
+                        console.log(chalk.gray(`    (${warnings.length}) warning(s) total.\n`));
+
+                    Object.keys(errors)
+                        .forEach(function(key) {
+                            console.log(chalk.red(`Error: ${errors[key]}\n`));
+                        });
+
+                    if (errors.length > 0)
+                        console.log(chalk.red(`    (${errors.length}) error(s) total.\n`));
+
+                    Object.keys(stats.compilation.assets)
+                        .forEach(function(key) {
+                            console.log(`Webpack: output ${chalk.green(key)}`);
+                        });
+
+                    console.log(`Webpack: ${chalk.blue(`finished`)}`);
+
+                    done();
+                }
+            });
     }
 };
 
