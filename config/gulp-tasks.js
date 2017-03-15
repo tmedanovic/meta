@@ -83,8 +83,8 @@ const ts = {
       './index.ts',
       './src/**/*.ts',
       '!./src/**/*.d.ts',
-      './testing/**/*.ts',
-      '!./testing/**/*.d.ts'
+      './tests/**/*.ts',
+      '!./tests/**/*.d.ts'
     ])
       .pipe($.tslint({formatter: 'verbose'}))
       .pipe($.tslint.report({emitError: false}))
