@@ -1,5 +1,5 @@
 // angular
-import { DOCUMENT, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { DomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
@@ -31,7 +31,6 @@ export class MetaService {
   constructor(public loader: MetaLoader,
               private readonly router: Router,
               @Inject(DOCUMENT) private readonly document: any,
-              private readonly title: Title,
               private readonly activatedRoute: ActivatedRoute) {
     this.metaSettings = loader.getSettings();
     this.isMetaTagSet = {};
@@ -189,7 +188,7 @@ export class MetaService {
 
     title$.subscribe((res: string) => {
       this._dom.setAttribute(ogTitleElement, 'content', res);
-      this.title.setTitle(res);
+      this.document.title = res;
     });
   }
 

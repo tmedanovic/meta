@@ -1,5 +1,5 @@
 import * as tslib_1 from "tslib";
-import { DOCUMENT, Title } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { __platform_browser_private__ } from '@angular/platform-browser';
@@ -14,11 +14,10 @@ import { PageTitlePositioning } from './models/page-title-positioning';
 import { MetaLoader } from './meta.loader';
 import { isObservable } from './util';
 var MetaService = (function () {
-    function MetaService(loader, router, document, title, activatedRoute) {
+    function MetaService(loader, router, document, activatedRoute) {
         this.loader = loader;
         this.router = router;
         this.document = document;
-        this.title = title;
         this.activatedRoute = activatedRoute;
         this._dom = __platform_browser_private__.getDOM();
         this.metaSettings = loader.getSettings();
@@ -153,7 +152,7 @@ var MetaService = (function () {
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
         title$.subscribe(function (res) {
             _this._dom.setAttribute(ogTitleElement, 'content', res);
-            _this.title.setTitle(res);
+            _this.document.title = res;
         });
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {
@@ -282,7 +281,6 @@ MetaService = tslib_1.__decorate([
     Injectable(),
     tslib_1.__param(2, Inject(DOCUMENT)),
     tslib_1.__metadata("design:paramtypes", [MetaLoader,
-        Router, Object, Title,
-        ActivatedRoute])
+        Router, Object, ActivatedRoute])
 ], MetaService);
 export { MetaService };

@@ -1,4 +1,3 @@
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/concat';
@@ -11,13 +10,12 @@ export declare class MetaService {
     loader: MetaLoader;
     private readonly router;
     private readonly document;
-    private readonly title;
     private readonly activatedRoute;
     private _dom;
     private readonly metaSettings;
     private readonly isMetaTagSet;
     private useRouteData;
-    constructor(loader: MetaLoader, router: Router, document: any, title: Title, activatedRoute: ActivatedRoute);
+    constructor(loader: MetaLoader, router: Router, document: any, activatedRoute: ActivatedRoute);
     init(useRouteData?: boolean): void;
     refresh(): void;
     setTitle(title: string, override?: boolean, deferred?: boolean): void;
