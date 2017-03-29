@@ -115,7 +115,7 @@ export class MetaService {
 
   private createMetaTag(name: string): any {
     const el = this._dom.createElement('meta') as HTMLMetaElement;
-    this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name )
+    this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name );
 
     const head = this.document.head;
     this._dom.appendChild(head, el);
@@ -188,7 +188,7 @@ export class MetaService {
     const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
     title$.subscribe((res: string) => {
-      this._dom.setAttribute(ogTitleElement,'content', res);
+      this._dom.setAttribute(ogTitleElement, 'content', res);
       this.title.setTitle(res);
     });
   }
@@ -203,7 +203,7 @@ export class MetaService {
       this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
 
     const html = this._dom.childNodes['html'];
-    this._dom.setAttribute(html,'lang', currentLocale);
+    this._dom.setAttribute(html, 'lang', currentLocale);
 
     const head = this.document.head;
     const selector = `meta[property="og:locale:alternate"]`;
@@ -221,7 +221,7 @@ export class MetaService {
         .forEach((locale: string) => {
           if (currentLocale.replace(/-/g, '_') !== locale.replace(/-/g, '_')) {
             const el = this.createMetaTag('og:locale:alternate');
-            this._dom.setAttribute(el,'content', locale.replace(/-/g, '_'));
+            this._dom.setAttribute(el, 'content', locale.replace(/-/g, '_'));
           }
         });
     }
@@ -231,18 +231,18 @@ export class MetaService {
     const tagElement = this.getOrCreateMetaTag(tag);
 
     value$.subscribe((res: string) => {
-      this._dom.setAttribute(tagElement,'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+      this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
       this.isMetaTagSet[tag] = true;
 
       if (tag === 'description') {
         const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
-        this._dom.setAttribute(ogDescriptionElement,'content', res)
+        this._dom.setAttribute(ogDescriptionElement, 'content', res);
       } else if (tag === 'author') {
         const ogAuthorElement = this.getOrCreateMetaTag('og:author');
-        this._dom.setAttribute(ogAuthorElement,'content', res);
+        this._dom.setAttribute(ogAuthorElement, 'content', res);
       } else if (tag === 'publisher') {
         const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
-        this._dom.setAttribute(ogPublisherElement,'content', res);
+        this._dom.setAttribute(ogPublisherElement, 'content', res);
       } else if (tag === 'og:locale') {
         const availableLocales = !!this.metaSettings.defaults
           ? this.metaSettings.defaults['og:locale:alternate']
