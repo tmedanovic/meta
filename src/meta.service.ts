@@ -113,8 +113,8 @@ export class MetaService {
   }
 
   private createMetaTag(name: string): any {
-    const el = this._dom.createElement('meta') as HTMLMetaElement;
-    this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name );
+    const el = this._dom.createElement('meta');
+    el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name );
 
     const head = this.document.head;
     this._dom.appendChild(head, el);
@@ -187,7 +187,7 @@ export class MetaService {
     const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
     title$.subscribe((res: string) => {
-      this._dom.setAttribute(ogTitleElement, 'content', res);
+      ogTitleElement.setAttribute('content', res);
       this.setDomTitle(res);
     });
   }
@@ -213,7 +213,15 @@ export class MetaService {
     if (!!currentLocale && !!this.metaSettings.defaults)
       this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
 
-    const html = this._dom.childNodes['html'];
+    let html;
+
+    for (let i = 0; i < this.document.children.length; ++i) {
+        if (this.document.children[i].name === 'html') {
+            html = this.document.children[i];
+            break;
+        }
+    }
+
     this._dom.setAttribute(html, 'lang', currentLocale);
 
     const head = this.document.head;
@@ -232,7 +240,7 @@ export class MetaService {
         .forEach((locale: string) => {
           if (currentLocale.replace(/-/g, '_') !== locale.replace(/-/g, '_')) {
             const el = this.createMetaTag('og:locale:alternate');
-            this._dom.setAttribute(el, 'content', locale.replace(/-/g, '_'));
+            el.setAttribute('content', locale.replace(/-/g, '_'));
           }
         });
     }
@@ -242,18 +250,18 @@ export class MetaService {
     const tagElement = this.getOrCreateMetaTag(tag);
 
     value$.subscribe((res: string) => {
-      this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+      tagElement.setAttribute('content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
       this.isMetaTagSet[tag] = true;
 
       if (tag === 'description') {
         const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
-        this._dom.setAttribute(ogDescriptionElement, 'content', res);
+        ogDescriptionElement.setAttribute('content', res);
       } else if (tag === 'author') {
         const ogAuthorElement = this.getOrCreateMetaTag('og:author');
-        this._dom.setAttribute(ogAuthorElement, 'content', res);
+        ogAuthorElement.setAttribute('content', res);
       } else if (tag === 'publisher') {
         const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
-        this._dom.setAttribute(ogPublisherElement, 'content', res);
+        ogPublisherElement.el.setAttribute('content', res);
       } else if (tag === 'og:locale') {
         const availableLocales = !!this.metaSettings.defaults
           ? this.metaSettings.defaults['og:locale:alternate']
@@ -264,7 +272,7 @@ export class MetaService {
       } else if (tag === 'og:locale:alternate') {
         const ogLocaleElement = this.getOrCreateMetaTag('og:locale');
 
-        const currentLocale = this._dom.getAttribute(ogLocaleElement, 'content');
+        const currentLocale = ogLocaleElement.getAttribute('content');
 
         this.updateLocales(currentLocale, res);
         this.isMetaTagSet['og:locale'] = true;

@@ -92,7 +92,7 @@ var MetaService = (function () {
     };
     MetaService.prototype.createMetaTag = function (name) {
         var el = this._dom.createElement('meta');
-        this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
+        el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
         var head = this.document.head;
         this._dom.appendChild(head, el);
         return el;
@@ -151,7 +151,7 @@ var MetaService = (function () {
         var _this = this;
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
         title$.subscribe(function (res) {
-            _this._dom.setAttribute(ogTitleElement, 'content', res);
+            ogTitleElement.setAttribute('content', res);
             _this.setDomTitle(res);
         });
     };
@@ -172,7 +172,13 @@ var MetaService = (function () {
                 : '';
         if (!!currentLocale && !!this.metaSettings.defaults)
             this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
-        var html = this._dom.childNodes['html'];
+        var html;
+        for (var i = 0; i < this.document.children.length; ++i) {
+            if (this.document.children[i].name === 'html') {
+                html = this.document.children[i];
+                break;
+            }
+        }
         this._dom.setAttribute(html, 'lang', currentLocale);
         var head = this.document.head;
         var selector = "meta[property=\"og:locale:alternate\"]";
@@ -186,7 +192,7 @@ var MetaService = (function () {
                 .forEach(function (locale) {
                 if (currentLocale.replace(/-/g, '_') !== locale.replace(/-/g, '_')) {
                     var el = _this.createMetaTag('og:locale:alternate');
-                    _this._dom.setAttribute(el, 'content', locale.replace(/-/g, '_'));
+                    el.setAttribute('content', locale.replace(/-/g, '_'));
                 }
             });
         }
@@ -195,19 +201,19 @@ var MetaService = (function () {
         var _this = this;
         var tagElement = this.getOrCreateMetaTag(tag);
         value$.subscribe(function (res) {
-            _this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+            tagElement.setAttribute('content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
             _this.isMetaTagSet[tag] = true;
             if (tag === 'description') {
                 var ogDescriptionElement = _this.getOrCreateMetaTag('og:description');
-                _this._dom.setAttribute(ogDescriptionElement, 'content', res);
+                ogDescriptionElement.setAttribute('content', res);
             }
             else if (tag === 'author') {
                 var ogAuthorElement = _this.getOrCreateMetaTag('og:author');
-                _this._dom.setAttribute(ogAuthorElement, 'content', res);
+                ogAuthorElement.setAttribute('content', res);
             }
             else if (tag === 'publisher') {
                 var ogPublisherElement = _this.getOrCreateMetaTag('og:publisher');
-                _this._dom.setAttribute(ogPublisherElement, 'content', res);
+                ogPublisherElement.el.setAttribute('content', res);
             }
             else if (tag === 'og:locale') {
                 var availableLocales = !!_this.metaSettings.defaults
@@ -218,7 +224,7 @@ var MetaService = (function () {
             }
             else if (tag === 'og:locale:alternate') {
                 var ogLocaleElement = _this.getOrCreateMetaTag('og:locale');
-                var currentLocale = _this._dom.getAttribute(ogLocaleElement, 'content');
+                var currentLocale = ogLocaleElement.getAttribute('content');
                 _this.updateLocales(currentLocale, res);
                 _this.isMetaTagSet['og:locale'] = true;
             }
