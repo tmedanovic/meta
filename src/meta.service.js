@@ -92,7 +92,7 @@ var MetaService = (function () {
     };
     MetaService.prototype.createMetaTag = function (name) {
         var el = this._dom.createElement('meta');
-        el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
+        this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
         var head = this.document.head;
         this._dom.appendChild(head, el);
         return el;
@@ -151,7 +151,7 @@ var MetaService = (function () {
         var _this = this;
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
         title$.subscribe(function (res) {
-            ogTitleElement.setAttribute('content', res);
+            _this._dom.setAttribute(ogTitleElement, 'content', res);
             _this.setDomTitle(res);
         });
     };
@@ -192,7 +192,7 @@ var MetaService = (function () {
                 .forEach(function (locale) {
                 if (currentLocale.replace(/-/g, '_') !== locale.replace(/-/g, '_')) {
                     var el = _this.createMetaTag('og:locale:alternate');
-                    el.setAttribute('content', locale.replace(/-/g, '_'));
+                    _this._dom.setAttribute(el, 'content', locale.replace(/-/g, '_'));
                 }
             });
         }
@@ -205,15 +205,15 @@ var MetaService = (function () {
             _this.isMetaTagSet[tag] = true;
             if (tag === 'description') {
                 var ogDescriptionElement = _this.getOrCreateMetaTag('og:description');
-                ogDescriptionElement.setAttribute('content', res);
+                _this._dom.setAttribute(ogDescriptionElement, 'content', res);
             }
             else if (tag === 'author') {
                 var ogAuthorElement = _this.getOrCreateMetaTag('og:author');
-                ogAuthorElement.setAttribute('content', res);
+                _this._dom.setAttribute(ogAuthorElement, 'content', res);
             }
             else if (tag === 'publisher') {
                 var ogPublisherElement = _this.getOrCreateMetaTag('og:publisher');
-                ogPublisherElement.el.setAttribute('content', res);
+                _this._dom.setAttribute(ogPublisherElement, 'content', res);
             }
             else if (tag === 'og:locale') {
                 var availableLocales = !!_this.metaSettings.defaults
