@@ -188,8 +188,20 @@ export class MetaService {
 
     title$.subscribe((res: string) => {
       this._dom.setAttribute(ogTitleElement, 'content', res);
-      this.document.title = res;
+      this.setDomTitle(res);
     });
+  }
+
+  private setDomTitle(title: string): void {
+     const head: Node = this.document.head;
+     let titleNode = this._dom.querySelector(head, 'title');
+
+     if (!titleNode) {
+       titleNode = this._dom.createElement('title');
+       this._dom.appendChild(head, titleNode);
+     }
+
+     this._dom.setInnerHTML(titleNode, title);
   }
 
   private updateLocales(currentLocale: string, availableLocales: string): void {

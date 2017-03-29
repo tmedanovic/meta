@@ -152,8 +152,17 @@ var MetaService = (function () {
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
         title$.subscribe(function (res) {
             _this._dom.setAttribute(ogTitleElement, 'content', res);
-            _this.document.title = res;
+            _this.setDomTitle(res);
         });
+    };
+    MetaService.prototype.setDomTitle = function (title) {
+        var head = this.document.head;
+        var titleNode = this._dom.querySelector(head, 'title');
+        if (!titleNode) {
+            titleNode = this._dom.createElement('title');
+            this._dom.appendChild(head, titleNode);
+        }
+        this._dom.setInnerHTML(titleNode, title);
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {
         var _this = this;

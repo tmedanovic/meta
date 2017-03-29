@@ -25,6 +25,7 @@ export declare class MetaService {
     private callback(value);
     private getTitleWithPositioning(title, override);
     private updateTitle(title$);
+    private setDomTitle(title);
     private updateLocales(currentLocale, availableLocales);
     private updateMetaTag(tag, value$);
     private updateMetaTags(currentUrl, metaSettings?);
