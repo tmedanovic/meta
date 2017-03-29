@@ -2,6 +2,8 @@
 import { DOCUMENT, Title } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { DomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
+import { __platform_browser_private__ } from '@angular/platform-browser';
 
 // libs
 import { Observable } from 'rxjs/Observable';
@@ -19,6 +21,9 @@ import { isObservable } from './util';
 
 @Injectable()
 export class MetaService {
+
+  private _dom: DomAdapter = __platform_browser_private__.getDOM();
+
   private readonly metaSettings: any;
   private readonly isMetaTagSet: any;
   private useRouteData: boolean;
@@ -118,11 +123,12 @@ export class MetaService {
 
   private getOrCreateMetaTag(name: string): any {
     let selector = `meta[name="${name}"]`;
+    const head = this.document.head;
 
     if (name.lastIndexOf('og:', 0) === 0)
       selector = `meta[property="${name}"]`;
 
-    let el = this.document.querySelector(selector);
+    let el = this._dom.querySelector(head, selector);
 
     if (!el)
       el = this.createMetaTag(name);
@@ -194,11 +200,12 @@ export class MetaService {
     if (!!currentLocale && !!this.metaSettings.defaults)
       this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
 
-    const html = this.document.querySelector('html');
+    const html = this._dom.childNodes['html'];
     html.setAttribute('lang', currentLocale);
 
+    const head = this.document.head;
     const selector = `meta[property="og:locale:alternate"]`;
-    let elements = this.document.querySelectorAll(selector);
+    let elements = this._dom.querySelectorAll(head, selector);
 
     // fixes "TypeError: Object doesn't support property or method 'forEach'" issue on IE11
     elements = Array.prototype.slice.call(elements);

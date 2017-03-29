@@ -1,0 +1,34 @@
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/concat';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/reduce';
+import 'rxjs/add/operator/take';
+import { MetaLoader } from './meta.loader';
+export declare class MetaService {
+    loader: MetaLoader;
+    private readonly router;
+    private readonly document;
+    private readonly title;
+    private readonly activatedRoute;
+    private _dom;
+    private readonly metaSettings;
+    private readonly isMetaTagSet;
+    private useRouteData;
+    constructor(loader: MetaLoader, router: Router, document: any, title: Title, activatedRoute: ActivatedRoute);
+    init(useRouteData?: boolean): void;
+    refresh(): void;
+    setTitle(title: string, override?: boolean, deferred?: boolean): void;
+    setTag(tag: string, value: string, deferred?: boolean): void;
+    private createMetaTag(name);
+    private getOrCreateMetaTag(name);
+    private callback(value);
+    private getTitleWithPositioning(title, override);
+    private updateTitle(title$);
+    private updateLocales(currentLocale, availableLocales);
+    private updateMetaTag(tag, value$);
+    private updateMetaTags(currentUrl, metaSettings?);
+    private traverseRoutes(route, url);
+}
