@@ -92,9 +92,10 @@ var MetaService = (function () {
         }
     };
     MetaService.prototype.createMetaTag = function (name) {
-        var el = this.document.createElement('meta');
+        var el = this._dom.createElement('meta');
         el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
-        this.document.head.appendChild(el);
+        var head = this.document.head;
+        this._dom.appendChild(head, el);
         return el;
     };
     MetaService.prototype.getOrCreateMetaTag = function (name) {
@@ -170,7 +171,7 @@ var MetaService = (function () {
         var elements = this._dom.querySelectorAll(head, selector);
         elements = Array.prototype.slice.call(elements);
         elements.forEach(function (el) {
-            _this.document.head.removeChild(el);
+            _this._dom.removeChild(head, el);
         });
         if (!!currentLocale && !!availableLocales) {
             availableLocales.split(',')

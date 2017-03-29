@@ -114,9 +114,11 @@ export class MetaService {
   }
 
   private createMetaTag(name: string): any {
-    const el = this.document.createElement('meta');
+    const el = this._dom.createElement('meta') as HTMLMetaElement;
     el.setAttribute(name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
-    this.document.head.appendChild(el);
+
+    const head = this.document.head;
+    this._dom.appendChild(head, el);
 
     return el;
   }
@@ -211,7 +213,7 @@ export class MetaService {
     elements = Array.prototype.slice.call(elements);
 
     elements.forEach((el: any) => {
-      this.document.head.removeChild(el);
+        this._dom.removeChild(head, el);
     });
 
     if (!!currentLocale && !!availableLocales) {
