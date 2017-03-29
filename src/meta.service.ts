@@ -250,7 +250,7 @@ export class MetaService {
     const tagElement = this.getOrCreateMetaTag(tag);
 
     value$.subscribe((res: string) => {
-      tagElement.setAttribute('content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+      this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
       this.isMetaTagSet[tag] = true;
 
       if (tag === 'description') {

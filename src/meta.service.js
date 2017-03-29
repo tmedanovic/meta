@@ -201,7 +201,7 @@ var MetaService = (function () {
         var _this = this;
         var tagElement = this.getOrCreateMetaTag(tag);
         value$.subscribe(function (res) {
-            tagElement.setAttribute('content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+            _this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
             _this.isMetaTagSet[tag] = true;
             if (tag === 'description') {
                 var ogDescriptionElement = _this.getOrCreateMetaTag('og:description');
