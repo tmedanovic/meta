@@ -174,7 +174,7 @@ var MetaService = (function () {
             this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
         var html;
         for (var i = 0; i < this.document.children.length; ++i) {
-            if (this.document.children[i].name === 'html') {
+            if (this.document.children[i].name === 'html' || this.document.children[i].nodeName === 'HTML') {
                 html = this.document.children[i];
                 break;
             }
