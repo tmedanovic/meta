@@ -5,6 +5,8 @@ import { MetaService } from './src/meta.service';
 export * from './src/models/page-title-positioning';
 export * from './src/meta.loader';
 export * from './src/meta.service';
+export * from './src/head.service';
+export * from './src/head.static';
 export function metaFactory() {
     return new MetaStaticLoader();
 }

@@ -21,6 +21,8 @@
     "src/models/meta-settings.ts",
     "src/meta.loader.ts",
     "src/meta.service.ts",
+    "src/head.service.ts",
+    "src/head.static.ts",
     "src/util.ts"
   ],
   "exclude": [

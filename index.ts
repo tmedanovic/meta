@@ -9,6 +9,8 @@ export * from './src/models/page-title-positioning';
 export * from './src/models/meta-settings';
 export * from './src/meta.loader';
 export * from './src/meta.service';
+export * from './src/head.service';
+export * from './src/head.static';
 
 // for AoT compilation
 export function metaFactory(): MetaLoader {
