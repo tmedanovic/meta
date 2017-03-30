@@ -250,12 +250,23 @@ var MetaService = (function () {
         this.setTag('og:url', url || '/');
     };
     MetaService.prototype.traverseRoutes = function (route, url) {
-        var meta = route.data['meta'];
+        var meta = this.getMeta(route.snapshot);
         if (!!meta) {
             this.updateMetaTags(url, meta);
         }
         else
             this.updateMetaTags(url);
+    };
+    MetaService.prototype.getMeta = function (snapshot) {
+        if (!!snapshot && !!snapshot.children && !!(snapshot.children.length > 0)) {
+            return this.getMeta(snapshot.children[0]);
+        }
+        else if (!!snapshot.data && !!snapshot.data['meta']) {
+            return snapshot.data['meta'];
+        }
+        else {
+            return '';
+        }
     };
     return MetaService;
 }());

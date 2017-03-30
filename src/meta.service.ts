@@ -298,12 +298,24 @@ export class MetaService {
   }
 
   private traverseRoutes(route: ActivatedRoute, url: string): void {
-    let meta = route.data['meta'];
+      let meta = this.getMeta(route.snapshot);
 
-    if (!!meta) {
-      this.updateMetaTags(url, meta);
+      if (!!meta) {
+        this.updateMetaTags(url, meta);
+      }
+      else
+        this.updateMetaTags(url);
+  }
+
+  private getMeta(snapshot): any {
+    if (!!snapshot && !!snapshot.children && !!(snapshot.children.length > 0)) {
+      return this.getMeta(snapshot.children[0]);
     }
-    else
-      this.updateMetaTags(url);
+    else if (!!snapshot.data && !!snapshot.data['meta']) {
+      return snapshot.data['meta'];
+    }
+    else {
+      return '';
+    }
   }
 }
