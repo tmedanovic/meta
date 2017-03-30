@@ -121,33 +121,36 @@ export class MetaService {
   }
 
   private getTitleWithPositioning(title: string, override: boolean): Observable<string> {
-    const defaultTitle$ = (!!this.metaSettings.defaults && !!this.metaSettings.defaults['title'])
-      ? this.callback(this.metaSettings.defaults['title'])
-      : Observable.of('');
+    let defaultTitle$;
 
-    const title$ = !!title
-      ? this.callback(title).concat(defaultTitle$).filter((res: string) => !!res).take(1)
-      : defaultTitle$;
+    if (this.metaSettings.defaults && this.metaSettings.defaults['title']) {
+       defaultTitle$ = this.callback(this.metaSettings.defaults['title']);
+    } else {
+       defaultTitle$ = Observable.of('');
+    }
+    let title$;
+    if (title) {
+      title$ = this.callback(title);
+    } else {
+      title$ = defaultTitle$;
+    }
 
     switch (this.metaSettings.pageTitlePositioning) {
       case PageTitlePositioning.AppendPageTitle:
-        return ((!override
-        && !!this.metaSettings.pageTitleSeparator
-        && !!this.metaSettings.applicationName)
-          ? this.callback(this.metaSettings.applicationName)
-            .map((res: string) => res + this.metaSettings.pageTitleSeparator)
-          : Observable.of(''))
-          .concat(title$)
-          .reduce((acc: string, cur: string) => acc + cur);
+
+        if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
+           return this.callback(this.metaSettings.applicationName)
+              .map((res: string) => res + this.metaSettings.pageTitleSeparator).concat(title$);
+        }
+        return Observable.of('');
       case PageTitlePositioning.PrependPageTitle:
-        return title$
-          .concat((!override
-          && !!this.metaSettings.pageTitleSeparator
-          && !!this.metaSettings.applicationName)
-            ? this.callback(this.metaSettings.applicationName)
-              .map((res: string) => this.metaSettings.pageTitleSeparator + res)
-            : Observable.of(''))
-          .reduce((acc: string, cur: string) => acc + cur);
+
+        if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
+           return title$.map((res: string) => res + this.metaSettings.pageTitleSeparator).concat(
+             this.callback(this.metaSettings.applicationName)
+           );
+        }
+        return Observable.of('');
       default:
         throw new Error(`Invalid pageTitlePositioning specified [${this.metaSettings.pageTitlePositioning}]!`);
     }
