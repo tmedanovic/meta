@@ -33,7 +33,7 @@ export class MetaService {
       this.init();
   }
 
-  public onSetTitle() : Observable<string> {
+  public onSetTitle(): Observable<string> {
     return this.setTitleSubject.asObservable();
   }
 
