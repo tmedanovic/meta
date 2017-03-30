@@ -111,19 +111,19 @@ var MetaService = (function () {
                 if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
                     return this.callback(this.metaSettings.applicationName).flatMap(function (operand1) {
                         return title$.map(function (res) { return res + _this.metaSettings.pageTitleSeparator + operand1; });
-                    });
+                    }).toPromise();
                 }
                 else {
-                    return title$;
+                    return title$.toPromise();
                 }
             case PageTitlePositioning.PrependPageTitle:
                 if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
                     return this.callback(this.metaSettings.applicationName).flatMap(function (operand1) {
                         return title$.map(function (res) { return operand1 + _this.metaSettings.pageTitleSeparator + res; });
-                    });
+                    }).toPromise();
                 }
                 else {
-                    return title$;
+                    return title$.toPromise();
                 }
             default:
                 throw new Error("Invalid pageTitlePositioning specified [" + this.metaSettings.pageTitlePositioning + "]!");
@@ -132,13 +132,12 @@ var MetaService = (function () {
     MetaService.prototype.updateTitle = function (title$) {
         var _this = this;
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
-        var sub = title$.subscribe(function (res) {
+        var sub = title$.then(function (res) {
             ogTitleElement['content'] = res;
             _this.headService.setTitle(res);
             if (isBrowser) {
                 _this.setTitleSubject.next(res);
             }
-            sub.unsubscribe();
         });
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {

@@ -121,7 +121,7 @@ export class MetaService {
     return Observable.of(value);
   }
 
-  private getTitleWithPositioning(title: string, override: boolean): Observable<string> {
+  private getTitleWithPositioning(title: string, override: boolean): Promise<string> {
     let defaultTitle$;
 
     if (this.metaSettings.defaults && this.metaSettings.defaults['title']) {
@@ -142,35 +142,34 @@ export class MetaService {
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
            return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
               return title$.map(res => res + this.metaSettings.pageTitleSeparator + operand1);
-           });
+           }).toPromise();
         } else {
-           return title$;
+           return title$.toPromise();
         }
       case PageTitlePositioning.PrependPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
            return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
               return title$.map(res => operand1 + this.metaSettings.pageTitleSeparator + res );
-           });
+           }).toPromise();
         } else {
-           return title$;
+           return title$.toPromise();
         }
       default:
         throw new Error(`Invalid pageTitlePositioning specified [${this.metaSettings.pageTitlePositioning}]!`);
     }
   }
 
-  private updateTitle(title$: Observable<string>): void {
+  private updateTitle(title$: Promise<string>): void {
     const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
-    let sub = title$.subscribe((res: string) => {
+    let sub = title$.then((res: string) => {
       ogTitleElement['content'] = res;
       this.headService.setTitle(res);
 
       if (isBrowser) {
         this.setTitleSubject.next(res);
       }
-      sub.unsubscribe();
     });
   }
 
