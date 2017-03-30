@@ -1,4 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
+import { HeadService } from './head.service';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/concat';
 import 'rxjs/add/operator/filter';
@@ -9,13 +10,12 @@ import { MetaLoader } from './meta.loader';
 export declare class MetaService {
     loader: MetaLoader;
     private readonly router;
-    private readonly document;
     private readonly activatedRoute;
-    private _dom;
+    private readonly headService;
     private readonly metaSettings;
     private readonly isMetaTagSet;
     private useRouteData;
-    constructor(loader: MetaLoader, router: Router, document: any, activatedRoute: ActivatedRoute);
+    constructor(loader: MetaLoader, router: Router, activatedRoute: ActivatedRoute, headService: HeadService);
     init(useRouteData?: boolean): void;
     refresh(): void;
     setTitle(title: string, override?: boolean, deferred?: boolean): void;
@@ -25,7 +25,6 @@ export declare class MetaService {
     private callback(value);
     private getTitleWithPositioning(title, override);
     private updateTitle(title$);
-    private setDomTitle(title);
     private updateLocales(currentLocale, availableLocales);
     private updateMetaTag(tag, value$);
     private updateMetaTags(currentUrl, metaSettings?);

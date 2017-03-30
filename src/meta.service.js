@@ -1,8 +1,7 @@
 import * as tslib_1 from "tslib";
-import { DOCUMENT } from '@angular/platform-browser';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { __platform_browser_private__ } from '@angular/platform-browser';
+import { HeadService } from './head.service';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/concat';
@@ -14,12 +13,11 @@ import { PageTitlePositioning } from './models/page-title-positioning';
 import { MetaLoader } from './meta.loader';
 import { isObservable } from './util';
 var MetaService = (function () {
-    function MetaService(loader, router, document, activatedRoute) {
+    function MetaService(loader, router, activatedRoute, headService) {
         this.loader = loader;
         this.router = router;
-        this.document = document;
         this.activatedRoute = activatedRoute;
-        this._dom = __platform_browser_private__.getDOM();
+        this.headService = headService;
         this.metaSettings = loader.getSettings();
         this.isMetaTagSet = {};
         if (!this.metaSettings.defer)
@@ -91,21 +89,22 @@ var MetaService = (function () {
         }
     };
     MetaService.prototype.createMetaTag = function (name) {
-        var el = this._dom.createElement('meta');
-        this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name);
-        var head = this.document.head;
-        this._dom.appendChild(head, el);
-        return el;
+        var tag = {};
+        tag[name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name'] = name;
+        this.headService.addMetaTag(tag);
+        return tag;
     };
     MetaService.prototype.getOrCreateMetaTag = function (name) {
-        var selector = "meta[name=\"" + name + "\"]";
-        var head = this.document.head;
-        if (name.lastIndexOf('og:', 0) === 0)
-            selector = "meta[property=\"" + name + "\"]";
-        var el = this._dom.querySelector(head, selector);
-        if (!el)
-            el = this.createMetaTag(name);
-        return el;
+        var tag;
+        if (name.lastIndexOf('og:', 0) === 0) {
+            tag = this.headService.findFirstMetaTag('property', name);
+        }
+        else {
+            tag = this.headService.findFirstMetaTag('name', name);
+        }
+        if (!tag)
+            tag = this.createMetaTag(name);
+        return tag;
     };
     MetaService.prototype.callback = function (value) {
         if (!!this.metaSettings.callback) {
@@ -151,18 +150,9 @@ var MetaService = (function () {
         var _this = this;
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
         title$.subscribe(function (res) {
-            _this._dom.setAttribute(ogTitleElement, 'content', res);
-            _this.setDomTitle(res);
+            ogTitleElement['content'] = res;
+            _this.headService.setTitle(res);
         });
-    };
-    MetaService.prototype.setDomTitle = function (title) {
-        var head = this.document.head;
-        var titleNode = this._dom.querySelector(head, 'title');
-        if (!titleNode) {
-            titleNode = this._dom.createElement('title');
-            this._dom.appendChild(head, titleNode);
-        }
-        this._dom.setInnerHTML(titleNode, title);
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {
         var _this = this;
@@ -172,27 +162,14 @@ var MetaService = (function () {
                 : '';
         if (!!currentLocale && !!this.metaSettings.defaults)
             this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
-        var html;
-        for (var i = 0; i < this.document.children.length; ++i) {
-            if (this.document.children[i].name === 'html' || this.document.children[i].nodeName === 'HTML') {
-                html = this.document.children[i];
-                break;
-            }
-        }
-        this._dom.setAttribute(html, 'lang', currentLocale);
-        var head = this.document.head;
-        var selector = "meta[property=\"og:locale:alternate\"]";
-        var elements = this._dom.querySelectorAll(head, selector);
-        elements = Array.prototype.slice.call(elements);
-        elements.forEach(function (el) {
-            _this._dom.removeChild(head, el);
-        });
+        this.headService.setLocale(currentLocale);
+        this.headService.removeMetaTags('property', 'og:locale:alternate');
         if (!!currentLocale && !!availableLocales) {
             availableLocales.split(',')
                 .forEach(function (locale) {
                 if (currentLocale.replace(/-/g, '_') !== locale.replace(/-/g, '_')) {
                     var el = _this.createMetaTag('og:locale:alternate');
-                    _this._dom.setAttribute(el, 'content', locale.replace(/-/g, '_'));
+                    el['content'] = locale.replace(/-/g, '_');
                 }
             });
         }
@@ -201,19 +178,19 @@ var MetaService = (function () {
         var _this = this;
         var tagElement = this.getOrCreateMetaTag(tag);
         value$.subscribe(function (res) {
-            _this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+            tagElement['content'] = tag === 'og:locale' ? res.replace(/-/g, '_') : res;
             _this.isMetaTagSet[tag] = true;
             if (tag === 'description') {
                 var ogDescriptionElement = _this.getOrCreateMetaTag('og:description');
-                _this._dom.setAttribute(ogDescriptionElement, 'content', res);
+                ogDescriptionElement['content'] = res;
             }
             else if (tag === 'author') {
                 var ogAuthorElement = _this.getOrCreateMetaTag('og:author');
-                _this._dom.setAttribute(ogAuthorElement, 'content', res);
+                ogAuthorElement['content'] = res;
             }
             else if (tag === 'publisher') {
                 var ogPublisherElement = _this.getOrCreateMetaTag('og:publisher');
-                _this._dom.setAttribute(ogPublisherElement, 'content', res);
+                ogPublisherElement['content'] = res;
             }
             else if (tag === 'og:locale') {
                 var availableLocales = !!_this.metaSettings.defaults
@@ -294,8 +271,9 @@ var MetaService = (function () {
 }());
 MetaService = tslib_1.__decorate([
     Injectable(),
-    tslib_1.__param(2, Inject(DOCUMENT)),
     tslib_1.__metadata("design:paramtypes", [MetaLoader,
-        Router, Object, ActivatedRoute])
+        Router,
+        ActivatedRoute,
+        HeadService])
 ], MetaService);
 export { MetaService };

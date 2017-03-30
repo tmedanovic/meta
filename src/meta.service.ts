@@ -2,8 +2,7 @@
 import { DOCUMENT } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { DomAdapter } from '@angular/platform-browser/src/dom/dom_adapter';
-import { __platform_browser_private__ } from '@angular/platform-browser';
+import { HeadService } from './head.service';
 
 // libs
 import { Observable } from 'rxjs/Observable';
@@ -22,16 +21,14 @@ import { isObservable } from './util';
 @Injectable()
 export class MetaService {
 
-  private _dom: DomAdapter = __platform_browser_private__.getDOM();
-
   private readonly metaSettings: any;
   private readonly isMetaTagSet: any;
   private useRouteData: boolean;
 
   constructor(public loader: MetaLoader,
               private readonly router: Router,
-              @Inject(DOCUMENT) private readonly document: any,
-              private readonly activatedRoute: ActivatedRoute) {
+              private readonly activatedRoute: ActivatedRoute,
+              private readonly headService: HeadService) {
     this.metaSettings = loader.getSettings();
     this.isMetaTagSet = {};
 
@@ -113,28 +110,27 @@ export class MetaService {
   }
 
   private createMetaTag(name: string): any {
-    const el = this._dom.createElement('meta');
-    this._dom.setAttribute(el, name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name', name );
+    let tag = {};
 
-    const head = this.document.head;
-    this._dom.appendChild(head, el);
+    tag[name.lastIndexOf('og:', 0) === 0 ? 'property' : 'name'] = name;
+    this.headService.addMetaTag(tag);
 
-    return el;
+    return tag;
   }
 
   private getOrCreateMetaTag(name: string): any {
-    let selector = `meta[name="${name}"]`;
-    const head = this.document.head;
+    let tag;
 
-    if (name.lastIndexOf('og:', 0) === 0)
-      selector = `meta[property="${name}"]`;
+    if (name.lastIndexOf('og:', 0) === 0) {
+      tag = this.headService.findFirstMetaTag('property', name);
+    } else {
+      tag = this.headService.findFirstMetaTag('name', name);
+    }
 
-    let el = this._dom.querySelector(head, selector);
+    if (!tag)
+      tag = this.createMetaTag(name);
 
-    if (!el)
-      el = this.createMetaTag(name);
-
-    return el;
+    return tag;
   }
 
   private callback(value: string): Observable<string> {
@@ -187,21 +183,9 @@ export class MetaService {
     const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
     title$.subscribe((res: string) => {
-      this._dom.setAttribute(ogTitleElement, 'content', res);
-      this.setDomTitle(res);
+      ogTitleElement['content'] = res;
+      this.headService.setTitle(res);
     });
-  }
-
-  private setDomTitle(title: string): void {
-     const head: Node = this.document.head;
-     let titleNode = this._dom.querySelector(head, 'title');
-
-     if (!titleNode) {
-       titleNode = this._dom.createElement('title');
-       this._dom.appendChild(head, titleNode);
-     }
-
-     this._dom.setInnerHTML(titleNode, title);
   }
 
   private updateLocales(currentLocale: string, availableLocales: string): void {
@@ -213,34 +197,15 @@ export class MetaService {
     if (!!currentLocale && !!this.metaSettings.defaults)
       this.metaSettings.defaults['og:locale'] = currentLocale.replace(/_/g, '-');
 
-    let html;
-    // name is used in node, nodeName in browser
-    for (let i = 0; i < this.document.children.length; ++i) {
-        if (this.document.children[i].name === 'html' || this.document.children[i].nodeName === 'HTML') {
-            html = this.document.children[i];
-            break;
-        }
-    }
-
-    this._dom.setAttribute(html, 'lang', currentLocale);
-
-    const head = this.document.head;
-    const selector = `meta[property="og:locale:alternate"]`;
-    let elements = this._dom.querySelectorAll(head, selector);
-
-    // fixes "TypeError: Object doesn't support property or method 'forEach'" issue on IE11
-    elements = Array.prototype.slice.call(elements);
-
-    elements.forEach((el: any) => {
-        this._dom.removeChild(head, el);
-    });
+    this.headService.setLocale(currentLocale);
+    this.headService.removeMetaTags('property', 'og:locale:alternate');
 
     if (!!currentLocale && !!availableLocales) {
       availableLocales.split(',')
         .forEach((locale: string) => {
           if (currentLocale.replace(/-/g, '_') !== locale.replace(/-/g, '_')) {
             const el = this.createMetaTag('og:locale:alternate');
-            this._dom.setAttribute(el, 'content', locale.replace(/-/g, '_'));
+            el['content'] = locale.replace(/-/g, '_');
           }
         });
     }
@@ -250,18 +215,18 @@ export class MetaService {
     const tagElement = this.getOrCreateMetaTag(tag);
 
     value$.subscribe((res: string) => {
-      this._dom.setAttribute(tagElement, 'content', tag === 'og:locale' ? res.replace(/-/g, '_') : res);
+      tagElement['content'] = tag === 'og:locale' ? res.replace(/-/g, '_') : res;
       this.isMetaTagSet[tag] = true;
 
       if (tag === 'description') {
         const ogDescriptionElement = this.getOrCreateMetaTag('og:description');
-        this._dom.setAttribute(ogDescriptionElement, 'content', res);
+        ogDescriptionElement['content'] = res;
       } else if (tag === 'author') {
         const ogAuthorElement = this.getOrCreateMetaTag('og:author');
-        this._dom.setAttribute(ogAuthorElement, 'content', res);
+        ogAuthorElement['content'] = res;
       } else if (tag === 'publisher') {
         const ogPublisherElement = this.getOrCreateMetaTag('og:publisher');
-        this._dom.setAttribute(ogPublisherElement, 'content', res);
+        ogPublisherElement['content'] = res;
       } else if (tag === 'og:locale') {
         const availableLocales = !!this.metaSettings.defaults
           ? this.metaSettings.defaults['og:locale:alternate']
