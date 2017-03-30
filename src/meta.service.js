@@ -40,27 +40,12 @@ var MetaService = (function () {
             return;
         this.traverseRoutes(this.router.routerState.root, this.router.url);
     };
-    MetaService.prototype.setTitle = function (title, override, deferred) {
-        var _this = this;
+    MetaService.prototype.setTitle = function (title, override) {
         if (override === void 0) { override = false; }
-        if (deferred === void 0) { deferred = true; }
         var title$ = this.getTitleWithPositioning(title, override);
-        if (!deferred)
-            this.updateTitle(title$);
-        else {
-            var sub_1 = this.router.events
-                .filter(function (event) { return (event instanceof NavigationEnd); })
-                .subscribe(function () {
-                _this.updateTitle(title$);
-            });
-            setTimeout(function () {
-                sub_1.unsubscribe();
-            }, 1);
-        }
+        this.updateTitle(title$);
     };
-    MetaService.prototype.setTag = function (tag, value, deferred) {
-        var _this = this;
-        if (deferred === void 0) { deferred = true; }
+    MetaService.prototype.setTag = function (tag, value) {
         if (tag === 'title')
             throw new Error("Attempt to set " + tag + " through 'setTag': 'title' is a reserved tag name. "
                 + "Please use 'MetaService.setTitle' instead.");
@@ -75,18 +60,7 @@ var MetaService = (function () {
                 : (!!this.metaSettings.defaults && this.metaSettings.defaults[tag])
                     ? this.metaSettings.defaults[tag]
                     : '');
-        if (!deferred)
-            this.updateMetaTag(tag, value$);
-        else {
-            var sub_2 = this.router.events
-                .filter(function (event) { return (event instanceof NavigationEnd); })
-                .subscribe(function () {
-                _this.updateMetaTag(tag, value$);
-            });
-            setTimeout(function () {
-                sub_2.unsubscribe();
-            }, 1);
-        }
+        this.updateMetaTag(tag, value$);
     };
     MetaService.prototype.createMetaTag = function (name) {
         var tag = {};
@@ -213,14 +187,14 @@ var MetaService = (function () {
             var fallbackTitle = !!this.metaSettings.defaults
                 ? (this.metaSettings.defaults['title'] || this.metaSettings['applicationName'])
                 : this.metaSettings['applicationName'];
-            this.setTitle(fallbackTitle, true, false);
+            this.setTitle(fallbackTitle, true);
         }
         else {
             if (metaSettings.disabled) {
                 this.updateMetaTags(currentUrl);
                 return;
             }
-            this.setTitle(metaSettings.title, metaSettings.override, false);
+            this.setTitle(metaSettings.title, metaSettings.override);
             Object.keys(metaSettings)
                 .forEach(function (key) {
                 var value = metaSettings[key];
@@ -233,7 +207,7 @@ var MetaService = (function () {
                     _this.updateLocales(currentLocale, metaSettings[key]);
                     return;
                 }
-                _this.setTag(key, value, false);
+                _this.setTag(key, value);
             });
         }
         if (!!this.metaSettings.defaults)
@@ -249,12 +223,12 @@ var MetaService = (function () {
                     _this.updateLocales(currentLocale, _this.metaSettings.defaults[key]);
                     return;
                 }
-                _this.setTag(key, value, false);
+                _this.setTag(key, value);
             });
         var url = ((this.metaSettings.applicationUrl || '/') + currentUrl)
             .replace(/(https?:\/\/)|(\/)+/g, '$1$2')
             .replace(/\/$/g, '');
-        this.setTag('og:url', url || '/', false);
+        this.setTag('og:url', url || '/');
     };
     MetaService.prototype.traverseRoutes = function (route, url) {
         while (route.children.length > 0) {

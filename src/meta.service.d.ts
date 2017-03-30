@@ -18,8 +18,8 @@ export declare class MetaService {
     constructor(loader: MetaLoader, router: Router, activatedRoute: ActivatedRoute, headService: HeadService);
     init(useRouteData?: boolean): void;
     refresh(): void;
-    setTitle(title: string, override?: boolean, deferred?: boolean): void;
-    setTag(tag: string, value: string, deferred?: boolean): void;
+    setTitle(title: string, override?: boolean): void;
+    setTag(tag: string, value: string): void;
     private createMetaTag(name);
     private getOrCreateMetaTag(name);
     private callback(value);

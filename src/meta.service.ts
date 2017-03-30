@@ -58,25 +58,12 @@ export class MetaService {
     this.traverseRoutes(this.router.routerState.root, this.router.url);
   }
 
-  setTitle(title: string, override = false, deferred = true): void {
+  setTitle(title: string, override = false): void {
     const title$ = this.getTitleWithPositioning(title, override);
-
-    if (!deferred)
-      this.updateTitle(title$);
-    else {
-      const sub = this.router.events
-        .filter(event => (event instanceof NavigationEnd))
-        .subscribe(() => {
-          this.updateTitle(title$);
-        });
-
-      setTimeout(() => {
-        sub.unsubscribe();
-      }, 1);
-    }
+    this.updateTitle(title$);
   }
 
-  setTag(tag: string, value: string, deferred = true): void {
+  setTag(tag: string, value: string): void {
     if (tag === 'title')
       throw new Error(`Attempt to set ${tag} through 'setTag': 'title' is a reserved tag name. `
         + `Please use 'MetaService.setTitle' instead.`);
@@ -93,20 +80,7 @@ export class MetaService {
           ? this.metaSettings.defaults[tag]
           : '');
 
-    if (!deferred)
-      this.updateMetaTag(tag, value$);
-    else {
-      const sub = this.router.events
-        .filter(event => (event instanceof NavigationEnd))
-        .subscribe(() => {
-          this.updateMetaTag(tag, value$);
-        });
-
-      setTimeout(() => {
-          sub.unsubscribe();
-        },
-        1);
-    }
+    this.updateMetaTag(tag, value$);
   }
 
   private createMetaTag(name: string): any {
@@ -251,14 +225,14 @@ export class MetaService {
         ? (this.metaSettings.defaults['title'] || this.metaSettings['applicationName'])
         : this.metaSettings['applicationName'];
 
-      this.setTitle(fallbackTitle, true, false);
+      this.setTitle(fallbackTitle, true);
     } else {
       if (metaSettings.disabled) {
         this.updateMetaTags(currentUrl);
         return;
       }
 
-      this.setTitle(metaSettings.title, metaSettings.override, false);
+      this.setTitle(metaSettings.title, metaSettings.override);
 
       Object.keys(metaSettings)
         .forEach(key => {
@@ -275,7 +249,7 @@ export class MetaService {
             return;
           }
 
-          this.setTag(key, value, false);
+          this.setTag(key, value);
         });
     }
 
@@ -295,14 +269,14 @@ export class MetaService {
             return;
           }
 
-          this.setTag(key, value, false);
+          this.setTag(key, value);
         });
 
     const url = ((this.metaSettings.applicationUrl || '/') + currentUrl)
       .replace(/(https?:\/\/)|(\/)+/g, '$1$2')
       .replace(/\/$/g, '');
 
-    this.setTag('og:url', url || '/', false);
+    this.setTag('og:url', url || '/');
   }
 
   private traverseRoutes(route: ActivatedRoute, url: string): void {
