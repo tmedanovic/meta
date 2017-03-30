@@ -1,4 +1,5 @@
 import * as tslib_1 from "tslib";
+import { Title } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
@@ -8,11 +9,12 @@ import { PageTitlePositioning } from './models/page-title-positioning';
 import { MetaLoader } from './meta.loader';
 import { isObservable } from './util';
 var MetaService = (function () {
-    function MetaService(loader, router, activatedRoute, headService) {
+    function MetaService(loader, router, activatedRoute, headService, titleService) {
         this.loader = loader;
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.headService = headService;
+        this.titleService = titleService;
         this.metaSettings = loader.getSettings();
         this.isMetaTagSet = {};
         if (!this.metaSettings.defer)
@@ -94,7 +96,7 @@ var MetaService = (function () {
             defaultTitle$ = Observable.of('');
         }
         var title$;
-        if (title) {
+        if (title && title !== '') {
             title$ = this.callback(title);
         }
         else {
@@ -107,14 +109,14 @@ var MetaService = (function () {
                         return title$.map(function (res) { return res + _this.metaSettings.pageTitleSeparator + operand1; });
                     });
                 }
-                return Observable.of('');
+                return title$;
             case PageTitlePositioning.PrependPageTitle:
                 if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
                     return this.callback(this.metaSettings.applicationName).flatMap(function (operand1) {
                         return title$.map(function (res) { return operand1 + _this.metaSettings.pageTitleSeparator + res; });
                     });
                 }
-                return Observable.of('');
+                return title$;
             default:
                 throw new Error("Invalid pageTitlePositioning specified [" + this.metaSettings.pageTitlePositioning + "]!");
         }
@@ -125,6 +127,7 @@ var MetaService = (function () {
         title$.subscribe(function (res) {
             ogTitleElement['content'] = res;
             _this.headService.setTitle(res);
+            _this.titleService.setTitle(res);
         });
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {
@@ -247,6 +250,7 @@ MetaService = tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [MetaLoader,
         Router,
         ActivatedRoute,
-        HeadService])
+        HeadService,
+        Title])
 ], MetaService);
 export { MetaService };

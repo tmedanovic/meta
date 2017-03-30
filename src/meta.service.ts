@@ -1,5 +1,5 @@
 // angular
-import { DOCUMENT } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
@@ -23,7 +23,8 @@ export class MetaService {
   constructor(public loader: MetaLoader,
               private readonly router: Router,
               private readonly activatedRoute: ActivatedRoute,
-              private readonly headService: HeadService) {
+              private readonly headService: HeadService,
+              private readonly titleService: Title) {
     this.metaSettings = loader.getSettings();
     this.isMetaTagSet = {};
 
@@ -124,7 +125,7 @@ export class MetaService {
        defaultTitle$ = Observable.of('');
     }
     let title$: Observable<string>;
-    if (title) {
+    if (title && title !== '') {
       title$ = this.callback(title);
     } else {
       title$ = defaultTitle$;
@@ -138,7 +139,7 @@ export class MetaService {
               return title$.map(res => res + this.metaSettings.pageTitleSeparator + operand1);
            });
         }
-        return Observable.of('');
+        return title$;
       case PageTitlePositioning.PrependPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
@@ -146,7 +147,7 @@ export class MetaService {
               return title$.map(res => operand1 + this.metaSettings.pageTitleSeparator + res );
            });
         }
-        return Observable.of('');
+        return title$;
       default:
         throw new Error(`Invalid pageTitlePositioning specified [${this.metaSettings.pageTitlePositioning}]!`);
     }
@@ -158,6 +159,7 @@ export class MetaService {
     title$.subscribe((res: string) => {
       ogTitleElement['content'] = res;
       this.headService.setTitle(res);
+      this.titleService.setTitle(res);
     });
   }
 
