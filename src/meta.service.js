@@ -33,7 +33,14 @@ var MetaService = (function () {
         this.router.events
             .filter(function (event) { return (event instanceof NavigationEnd); })
             .subscribe(function (routeData) {
-            _this.traverseRoutes(_this.activatedRoute, routeData.urlAfterRedirects);
+            Observable.of(_this.activatedRoute)
+                .map(function (route) {
+                while (route.firstChild)
+                    route = route.firstChild;
+                return route;
+            })
+                .filter(function (route) { return route.outlet === 'primary'; })
+                .subscribe(function (event) { return _this.traverseRoutes(event, routeData.urlAfterRedirects); });
         });
     };
     MetaService.prototype.refresh = function () {
@@ -243,25 +250,12 @@ var MetaService = (function () {
         this.setTag('og:url', url || '/');
     };
     MetaService.prototype.traverseRoutes = function (route, url) {
-        while (route.children.length > 0) {
-            var meta = this.getMeta(route.snapshot);
-            if (!!meta) {
-                this.updateMetaTags(url, meta);
-            }
-            else
-                this.updateMetaTags(url);
+        var meta = route.data['meta'];
+        if (!!meta) {
+            this.updateMetaTags(url, meta);
         }
-    };
-    MetaService.prototype.getMeta = function (snapshot) {
-        if (!!snapshot && !!snapshot.children && !!(snapshot.children.length > 0)) {
-            return this.getMeta(snapshot.children[0]);
-        }
-        else if (!!snapshot.data && !!snapshot.data['titleKey']) {
-            return snapshot.data['titleKey'];
-        }
-        else {
-            return '';
-        }
+        else
+            this.updateMetaTags(url);
     };
     return MetaService;
 }());

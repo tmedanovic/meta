@@ -27,5 +27,4 @@ export declare class MetaService {
     private updateMetaTag(tag, value$);
     private updateMetaTags(currentUrl, metaSettings?);
     private traverseRoutes(route, url);
-    private getMeta(snapshot);
 }

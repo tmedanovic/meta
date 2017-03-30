@@ -23,9 +23,9 @@ export class MetaService {
   private useRouteData: boolean;
 
   constructor(public loader: MetaLoader,
-              private readonly router: Router,
-              private readonly activatedRoute: ActivatedRoute,
-              private readonly headService: HeadService) {
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly headService: HeadService) {
     this.metaSettings = loader.getSettings();
     this.isMetaTagSet = {};
 
@@ -47,7 +47,14 @@ export class MetaService {
     this.router.events
       .filter(event => (event instanceof NavigationEnd))
       .subscribe((routeData: any) => {
-        this.traverseRoutes(this.activatedRoute, routeData.urlAfterRedirects);
+
+        Observable.of(this.activatedRoute)
+          .map(route => {
+            while (route.firstChild) route = route.firstChild;
+            return route;
+          })
+          .filter(route => route.outlet === 'primary')
+          .subscribe((event) => this.traverseRoutes(event, routeData.urlAfterRedirects));
       });
   }
 
@@ -125,9 +132,9 @@ export class MetaService {
     let defaultTitle$;
 
     if (this.metaSettings.defaults && this.metaSettings.defaults['title']) {
-       defaultTitle$ = this.callback(this.metaSettings.defaults['title']);
+      defaultTitle$ = this.callback(this.metaSettings.defaults['title']);
     } else {
-       defaultTitle$ = Observable.of('');
+      defaultTitle$ = Observable.of('');
     }
     let title$: Observable<string>;
     if (title) {
@@ -140,20 +147,20 @@ export class MetaService {
       case PageTitlePositioning.AppendPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
-           return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
-              return title$.map(res => res + this.metaSettings.pageTitleSeparator + operand1);
-           }).toPromise();
+          return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
+            return title$.map(res => res + this.metaSettings.pageTitleSeparator + operand1);
+          }).toPromise();
         } else {
-           return title$.toPromise();
+          return title$.toPromise();
         }
       case PageTitlePositioning.PrependPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
-           return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
-              return title$.map(res => operand1 + this.metaSettings.pageTitleSeparator + res );
-           }).toPromise();
+          return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
+            return title$.map(res => operand1 + this.metaSettings.pageTitleSeparator + res);
+          }).toPromise();
         } else {
-           return title$.toPromise();
+          return title$.toPromise();
         }
       default:
         throw new Error(`Invalid pageTitlePositioning specified [${this.metaSettings.pageTitlePositioning}]!`);
@@ -291,26 +298,12 @@ export class MetaService {
   }
 
   private traverseRoutes(route: ActivatedRoute, url: string): void {
-    while (route.children.length > 0) {
-      let meta = this.getMeta(route.snapshot);
+    let meta = route.data['meta'];
 
-      if (!!meta) {
-        this.updateMetaTags(url, meta);
-      }
-      else
-        this.updateMetaTags(url);
+    if (!!meta) {
+      this.updateMetaTags(url, meta);
     }
-  }
-
-  private getMeta(snapshot): any {
-    if (!!snapshot && !!snapshot.children && !!(snapshot.children.length > 0)) {
-      return this.getMeta(snapshot.children[0]);
-    }
-    else if (!!snapshot.data && !!snapshot.data['titleKey']) {
-      return snapshot.data['titleKey'];
-    }
-    else {
-      return '';
-    }
+    else
+      this.updateMetaTags(url);
   }
 }
