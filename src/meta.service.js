@@ -96,7 +96,7 @@ var MetaService = (function () {
             defaultTitle$ = Observable.of('');
         }
         var title$;
-        if (title && title !== '') {
+        if (title) {
             title$ = this.callback(title);
         }
         else {
@@ -109,14 +109,18 @@ var MetaService = (function () {
                         return title$.map(function (res) { return res + _this.metaSettings.pageTitleSeparator + operand1; });
                     });
                 }
-                return title$;
+                else {
+                    return title$;
+                }
             case PageTitlePositioning.PrependPageTitle:
                 if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
                     return this.callback(this.metaSettings.applicationName).flatMap(function (operand1) {
                         return title$.map(function (res) { return operand1 + _this.metaSettings.pageTitleSeparator + res; });
                     });
                 }
-                return title$;
+                else {
+                    return title$;
+                }
             default:
                 throw new Error("Invalid pageTitlePositioning specified [" + this.metaSettings.pageTitlePositioning + "]!");
         }

@@ -125,7 +125,7 @@ export class MetaService {
        defaultTitle$ = Observable.of('');
     }
     let title$: Observable<string>;
-    if (title && title !== '') {
+    if (title) {
       title$ = this.callback(title);
     } else {
       title$ = defaultTitle$;
@@ -138,16 +138,18 @@ export class MetaService {
            return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
               return title$.map(res => res + this.metaSettings.pageTitleSeparator + operand1);
            });
+        } else {
+           return title$;
         }
-        return title$;
       case PageTitlePositioning.PrependPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
            return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
               return title$.map(res => operand1 + this.metaSettings.pageTitleSeparator + res );
            });
+        } else {
+           return title$;
         }
-        return title$;
       default:
         throw new Error(`Invalid pageTitlePositioning specified [${this.metaSettings.pageTitlePositioning}]!`);
     }
