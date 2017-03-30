@@ -1,5 +1,4 @@
 // angular
-import { Title } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
@@ -7,6 +6,7 @@ import { isBrowser, isNode } from 'angular2-universal';
 
 // libs
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs';
 
 // module
@@ -16,6 +16,7 @@ import { isObservable } from './util';
 
 @Injectable()
 export class MetaService {
+  private setTitleSubject = new Subject<string>();
 
   private readonly metaSettings: any;
   private readonly isMetaTagSet: any;
@@ -24,13 +25,16 @@ export class MetaService {
   constructor(public loader: MetaLoader,
               private readonly router: Router,
               private readonly activatedRoute: ActivatedRoute,
-              private readonly headService: HeadService,
-              private readonly titleService: Title) {
+              private readonly headService: HeadService) {
     this.metaSettings = loader.getSettings();
     this.isMetaTagSet = {};
 
     if (!this.metaSettings.defer)
       this.init();
+  }
+
+  public onSetTitle() : Observable<string> {
+    return this.setTitleSubject.asObservable();
   }
 
   init(useRouteData: boolean = true): void {
@@ -164,7 +168,7 @@ export class MetaService {
       this.headService.setTitle(res);
 
       if (isBrowser) {
-        this.titleService.setTitle(res);
+        this.setTitleSubject.next(res);
       }
     });
   }

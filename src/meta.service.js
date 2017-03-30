@@ -1,26 +1,29 @@
 import * as tslib_1 from "tslib";
-import { Title } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
 import { isBrowser } from 'angular2-universal';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs';
 import { PageTitlePositioning } from './models/page-title-positioning';
 import { MetaLoader } from './meta.loader';
 import { isObservable } from './util';
 var MetaService = (function () {
-    function MetaService(loader, router, activatedRoute, headService, titleService) {
+    function MetaService(loader, router, activatedRoute, headService) {
         this.loader = loader;
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.headService = headService;
-        this.titleService = titleService;
+        this.setTitleSubject = new Subject();
         this.metaSettings = loader.getSettings();
         this.isMetaTagSet = {};
         if (!this.metaSettings.defer)
             this.init();
     }
+    MetaService.prototype.onSetTitle = function () {
+        return this.setTitleSubject.asObservable();
+    };
     MetaService.prototype.init = function (useRouteData) {
         var _this = this;
         if (useRouteData === void 0) { useRouteData = true; }
@@ -133,7 +136,7 @@ var MetaService = (function () {
             ogTitleElement['content'] = res;
             _this.headService.setTitle(res);
             if (isBrowser) {
-                _this.titleService.setTitle(res);
+                _this.setTitleSubject.next(res);
             }
         });
     };
@@ -257,7 +260,6 @@ MetaService = tslib_1.__decorate([
     tslib_1.__metadata("design:paramtypes", [MetaLoader,
         Router,
         ActivatedRoute,
-        HeadService,
-        Title])
+        HeadService])
 ], MetaService);
 export { MetaService };
