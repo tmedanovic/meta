@@ -244,13 +244,23 @@ var MetaService = (function () {
     };
     MetaService.prototype.traverseRoutes = function (route, url) {
         while (route.children.length > 0) {
-            route = route.firstChild;
-            if (!!route.snapshot.routeConfig.data) {
-                var metaSettings = route.snapshot.routeConfig.data['meta'];
-                this.updateMetaTags(url, metaSettings);
+            var meta = this.getMeta(route.snapshot);
+            if (!!meta) {
+                this.updateMetaTags(url, meta);
             }
             else
                 this.updateMetaTags(url);
+        }
+    };
+    MetaService.prototype.getMeta = function (snapshot) {
+        if (!!snapshot && !!snapshot.children && !!(snapshot.children.length > 0)) {
+            return this.getMeta(snapshot.children[0]);
+        }
+        else if (!!snapshot.data && !!snapshot.data['titleKey']) {
+            return snapshot.data['titleKey'];
+        }
+        else {
+            return '';
         }
     };
     return MetaService;

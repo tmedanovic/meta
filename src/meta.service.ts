@@ -292,14 +292,25 @@ export class MetaService {
 
   private traverseRoutes(route: ActivatedRoute, url: string): void {
     while (route.children.length > 0) {
-      route = route.firstChild;
+      let meta = this.getMeta(route.snapshot);
 
-      if (!!route.snapshot.routeConfig.data) {
-        const metaSettings = route.snapshot.routeConfig.data['meta'];
-        this.updateMetaTags(url, metaSettings);
+      if (!!meta) {
+        this.updateMetaTags(url, meta);
       }
       else
         this.updateMetaTags(url);
+    }
+  }
+
+  private getMeta(snapshot): any {
+    if (!!snapshot && !!snapshot.children && !!(snapshot.children.length > 0)) {
+      return this.getMeta(snapshot.children[0]);
+    }
+    else if (!!snapshot.data && !!snapshot.data['titleKey']) {
+      return snapshot.data['titleKey'];
+    }
+    else {
+      return '';
     }
   }
 }
