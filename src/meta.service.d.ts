@@ -1,11 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { HeadService } from './head.service';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/concat';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/take';
+import 'rxjs';
 import { MetaLoader } from './meta.loader';
 export declare class MetaService {
     loader: MetaLoader;

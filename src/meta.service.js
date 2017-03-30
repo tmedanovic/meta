@@ -3,12 +3,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/concat';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/take';
+import 'rxjs';
 import { PageTitlePositioning } from './models/page-title-positioning';
 import { MetaLoader } from './meta.loader';
 import { isObservable } from './util';
@@ -108,13 +103,16 @@ var MetaService = (function () {
         switch (this.metaSettings.pageTitlePositioning) {
             case PageTitlePositioning.AppendPageTitle:
                 if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
-                    return this.callback(this.metaSettings.applicationName)
-                        .map(function (res) { return res + _this.metaSettings.pageTitleSeparator; }).concat(title$);
+                    return this.callback(this.metaSettings.applicationName).flatMap(function (operand1) {
+                        return title$.map(function (res) { return res + _this.metaSettings.pageTitleSeparator + operand1; });
+                    });
                 }
                 return Observable.of('');
             case PageTitlePositioning.PrependPageTitle:
                 if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
-                    return title$.map(function (res) { return res + _this.metaSettings.pageTitleSeparator; }).concat(this.callback(this.metaSettings.applicationName));
+                    return this.callback(this.metaSettings.applicationName).flatMap(function (operand1) {
+                        return title$.map(function (res) { return operand1 + _this.metaSettings.pageTitleSeparator + res; });
+                    });
                 }
                 return Observable.of('');
             default:

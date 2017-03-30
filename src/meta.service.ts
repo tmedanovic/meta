@@ -6,12 +6,7 @@ import { HeadService } from './head.service';
 
 // libs
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/concat';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/reduce';
-import 'rxjs/add/operator/take';
+import 'rxjs';
 
 // module
 import { PageTitlePositioning } from './models/page-title-positioning';
@@ -128,7 +123,7 @@ export class MetaService {
     } else {
        defaultTitle$ = Observable.of('');
     }
-    let title$;
+    let title$: Observable<string>;
     if (title) {
       title$ = this.callback(title);
     } else {
@@ -139,16 +134,17 @@ export class MetaService {
       case PageTitlePositioning.AppendPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
-           return this.callback(this.metaSettings.applicationName)
-              .map((res: string) => res + this.metaSettings.pageTitleSeparator).concat(title$);
+           return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
+              return title$.map(res => res + this.metaSettings.pageTitleSeparator + operand1);
+           });
         }
         return Observable.of('');
       case PageTitlePositioning.PrependPageTitle:
 
         if (!override && this.metaSettings.pageTitleSeparator && this.metaSettings.applicationName) {
-           return title$.map((res: string) => res + this.metaSettings.pageTitleSeparator).concat(
-             this.callback(this.metaSettings.applicationName)
-           );
+           return this.callback(this.metaSettings.applicationName).flatMap((operand1) => {
+              return title$.map(res => operand1 + this.metaSettings.pageTitleSeparator + res );
+           });
         }
         return Observable.of('');
       default:
