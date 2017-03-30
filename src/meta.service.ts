@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
+import { isBrowser, isNode } from 'angular2-universal';
 
 // libs
 import { Observable } from 'rxjs/Observable';
@@ -161,7 +162,10 @@ export class MetaService {
     title$.subscribe((res: string) => {
       ogTitleElement['content'] = res;
       this.headService.setTitle(res);
-      this.titleService.setTitle(res);
+
+      if (isBrowser) {
+        this.titleService.setTitle(res);
+      }
     });
   }
 

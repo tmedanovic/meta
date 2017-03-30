@@ -3,6 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
+import { isBrowser } from 'angular2-universal';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs';
 import { PageTitlePositioning } from './models/page-title-positioning';
@@ -131,7 +132,9 @@ var MetaService = (function () {
         title$.subscribe(function (res) {
             ogTitleElement['content'] = res;
             _this.headService.setTitle(res);
-            _this.titleService.setTitle(res);
+            if (isBrowser) {
+                _this.titleService.setTitle(res);
+            }
         });
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {
