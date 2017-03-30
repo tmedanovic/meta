@@ -132,12 +132,13 @@ var MetaService = (function () {
     MetaService.prototype.updateTitle = function (title$) {
         var _this = this;
         var ogTitleElement = this.getOrCreateMetaTag('og:title');
-        title$.subscribe(function (res) {
+        var sub = title$.subscribe(function (res) {
             ogTitleElement['content'] = res;
             _this.headService.setTitle(res);
             if (isBrowser) {
                 _this.setTitleSubject.next(res);
             }
+            sub.unsubscribe();
         });
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {

@@ -163,13 +163,14 @@ export class MetaService {
   private updateTitle(title$: Observable<string>): void {
     const ogTitleElement = this.getOrCreateMetaTag('og:title');
 
-    title$.subscribe((res: string) => {
+    let sub = title$.subscribe((res: string) => {
       ogTitleElement['content'] = res;
       this.headService.setTitle(res);
 
       if (isBrowser) {
         this.setTitleSubject.next(res);
       }
+      sub.unsubscribe();
     });
   }
 
