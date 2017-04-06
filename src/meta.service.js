@@ -2,7 +2,6 @@ import * as tslib_1 from "tslib";
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
-import { isBrowser } from 'angular2-universal';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs';
@@ -142,9 +141,7 @@ var MetaService = (function () {
         var sub = title$.then(function (res) {
             ogTitleElement['content'] = res;
             _this.headService.setTitle(res);
-            if (isBrowser) {
-                _this.setTitleSubject.next(res);
-            }
+            _this.setTitleSubject.next(res);
         });
     };
     MetaService.prototype.updateLocales = function (currentLocale, availableLocales) {

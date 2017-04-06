@@ -2,7 +2,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { HeadService } from './head.service';
-import { isBrowser, isNode } from 'angular2-universal';
 
 // libs
 import { Observable } from 'rxjs/Observable';
@@ -173,10 +172,7 @@ export class MetaService {
     let sub = title$.then((res: string) => {
       ogTitleElement['content'] = res;
       this.headService.setTitle(res);
-
-      if (isBrowser) {
-        this.setTitleSubject.next(res);
-      }
+      this.setTitleSubject.next(res);
     });
   }
 
@@ -298,13 +294,13 @@ export class MetaService {
   }
 
   private traverseRoutes(route: ActivatedRoute, url: string): void {
-      let meta = this.getMeta(route.snapshot);
+    let meta = this.getMeta(route.snapshot);
 
-      if (!!meta) {
-        this.updateMetaTags(url, meta);
-      }
-      else
-        this.updateMetaTags(url);
+    if (!!meta) {
+      this.updateMetaTags(url, meta);
+    }
+    else
+      this.updateMetaTags(url);
   }
 
   private getMeta(snapshot): any {
