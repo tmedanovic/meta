@@ -239,7 +239,7 @@ export class MetaService {
         ? (this.metaSettings.defaults['title'] || this.metaSettings['applicationName'])
         : this.metaSettings['applicationName'];
 
-      this.setTitle(fallbackTitle, true);
+      this.setTitle(fallbackTitle);
     } else {
       if (metaSettings.disabled) {
         this.updateMetaTags(currentUrl);
